@@ -12,18 +12,20 @@ import (
 
 // Enum collection names
 const (
-	JobCollection            = "job"
-	BusinessCollection       = "business"
-	JobApplicationCollection = "job-application"
+	JobCollection                = "job"
+	BusinessCollection           = "business"
+	JobApplicationCollection     = "job-application"
+	InitJobApplicationCollection = "init-job-application"
 )
 
 // MongoClient structure contains all the database collections and the instance of the database
 type MongoClient struct {
-	Client                   *mongo.Client
-	Database                 *mongo.Database
-	JobCollection            *mongo.Collection
-	BusinessCollection       *mongo.Collection
-	JobApplicationCollection *mongo.Collection
+	Client                       *mongo.Client
+	Database                     *mongo.Database
+	JobCollection                *mongo.Collection
+	BusinessCollection           *mongo.Collection
+	JobApplicationCollection     *mongo.Collection
+	InitJobApplicationCollection *mongo.Collection
 }
 
 var (
@@ -43,11 +45,12 @@ func NewMongoClient() (*MongoClient, error) {
 	database := client.Database(dbName)
 
 	return &MongoClient{
-		Database:                 database,
-		JobCollection:            database.Collection(JobCollection),
-		BusinessCollection:       database.Collection(BusinessCollection),
-		JobApplicationCollection: database.Collection(JobApplicationCollection),
-		Client:                   client,
+		Database:                     database,
+		JobCollection:                database.Collection(JobCollection),
+		BusinessCollection:           database.Collection(BusinessCollection),
+		JobApplicationCollection:     database.Collection(JobApplicationCollection),
+		InitJobApplicationCollection: database.Collection(InitJobApplicationCollection),
+		Client:                       client,
 	}, nil
 }
 

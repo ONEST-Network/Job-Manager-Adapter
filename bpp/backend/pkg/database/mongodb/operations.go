@@ -16,6 +16,7 @@ type MongoOperator interface {
 		opts ...*options.UpdateOptions) (*mongo.UpdateResult, error)
 	UpdateMany(ctx context.Context, collection *mongo.Collection, query, update bson.D,
 		opts ...*options.UpdateOptions) (*mongo.UpdateResult, error)
+	UpdateAndReturnDocument(ctx context.Context, collection *mongo.Collection, query, update bson.D) *mongo.SingleResult
 	Delete(ctx context.Context, collection *mongo.Collection, query bson.D, opts ...*options.DeleteOptions) (*mongo.DeleteResult, error)
 	Aggregate(ctx context.Context, collection *mongo.Collection, pipeline interface{}, opts ...*options.AggregateOptions) (*mongo.Cursor, error)
 	ListDataBase(ctx context.Context, mclient *mongo.Client) ([]string, error)
@@ -46,6 +47,11 @@ func (m *MongoOperations) List(ctx context.Context, collection *mongo.Collection
 // Update updates a document in the database based on a query
 func (m *MongoOperations) Update(ctx context.Context, collection *mongo.Collection, query, update bson.D, opts ...*options.UpdateOptions) (*mongo.UpdateResult, error) {
 	return collection.UpdateOne(ctx, query, update, opts...)
+}
+
+// UpdateAndReturnDocument updates a document and then returns the updated document
+func (m *MongoOperations) UpdateAndReturnDocument(ctx context.Context, collection *mongo.Collection, query, update bson.D) *mongo.SingleResult {
+	return collection.FindOneAndUpdate(ctx, query, update, options.FindOneAndUpdate().SetReturnDocument(options.After))
 }
 
 // Update updates a document in the database based on a query

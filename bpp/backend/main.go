@@ -25,10 +25,10 @@ func main() {
 	proxy.SetProxyENVs()
 
 	// Initialize mongodb clients
-	businessClient, jobClient, jobApplicationClient := server.InitMongoDB()
+	businessClient, jobClient, jobApplicationClient, initJobApplication := server.InitMongoDB()
 
 	// Set up clients
-	clients := clients.NewClients(jobClient, businessClient, jobApplicationClient)
+	clients := clients.NewClients(jobClient, businessClient, jobApplicationClient, initJobApplication)
 
 	// initialize the server
 	server := server.SetupServer(clients)

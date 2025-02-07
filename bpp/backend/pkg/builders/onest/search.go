@@ -1,4 +1,4 @@
-package job
+package onest
 
 import (
 	"fmt"
@@ -13,7 +13,7 @@ import (
 	"github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/utils"
 )
 
-func BuildJobsResponse(clients *clients.Clients, payload *request.SearchRequest, jobs []job.Job) (*response.SearchResponse, error) {
+func BuildSearchJobsResponse(clients *clients.Clients, payload *request.SearchRequest, jobs []job.Job) (*response.SearchResponse, error) {
 	res := response.SearchResponse{
 		Context: response.Context{
 			Domain:        payload.Context.Domain,
@@ -33,7 +33,7 @@ func BuildJobsResponse(clients *clients.Clients, payload *request.SearchRequest,
 					Code: payload.Context.Location.Country.Code,
 				},
 			},
-			Timestamp: time.Now().UTC().Format("2006-01-02T15:04:05.000Z"),
+			Timestamp: time.Now().UTC().Format(time.RFC3339),
 			TTL:       "PT30S",
 		},
 		Message: response.Message{
@@ -47,6 +47,12 @@ func BuildJobsResponse(clients *clients.Clients, payload *request.SearchRequest,
 						Descriptor: response.ProvidersDescriptor{
 							Name:      "BPP",
 							ShortDesc: "BPP",
+						},
+						Fulfillments: []response.Fulfillments{
+							{
+								ID:   "F1",
+								Type: "lead & recruitment",
+							},
 						},
 						Locations: []response.Locations{},
 						Items:     []response.Items{},
@@ -109,6 +115,9 @@ func BuildJobsResponse(clients *clients.Clients, payload *request.SearchRequest,
 				},
 			},
 			LocationIds: []string{fmt.Sprintf("L%d", i+1)},
+			FulfillmentIds: []string{
+				"F1",
+			},
 			Creator: response.Creator{
 				Descriptor: response.CreatorDescriptor{
 					Name:     business.Name,

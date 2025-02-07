@@ -10,6 +10,7 @@ import (
 	"github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/clients"
 	"github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/database/mongodb"
 	dbBusiness "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/database/mongodb/business"
+	dbInitJobApplication "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/database/mongodb/init-job-application"
 	dbJob "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/database/mongodb/job"
 	dbJobApplication "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/database/mongodb/job-application"
 )
@@ -34,7 +35,7 @@ func SetupServer(clients *clients.Clients) *gin.Engine {
 	return server
 }
 
-func InitMongoDB() (*dbBusiness.Dao, *dbJob.Dao, *dbJobApplication.Dao) {
+func InitMongoDB() (*dbBusiness.Dao, *dbJob.Dao, *dbJobApplication.Dao, *dbInitJobApplication.Dao) {
 	var err error
 
 	// Initialize mongodb clients
@@ -48,6 +49,7 @@ func InitMongoDB() (*dbBusiness.Dao, *dbJob.Dao, *dbJobApplication.Dao) {
 	business := dbBusiness.NewBusinessDao(mongodb.Client.BusinessCollection)
 	job := dbJob.NewJobDao(mongodb.Client.JobCollection)
 	jobApplication := dbJobApplication.NewJobApplicationDao(mongodb.Client.JobApplicationCollection)
+	initJobApplication := dbInitJobApplication.NewInitJobApplicationDao(mongodb.Client.InitJobApplicationCollection)
 
-	return business, job, jobApplication
+	return business, job, jobApplication, initJobApplication
 }

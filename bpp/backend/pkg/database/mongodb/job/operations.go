@@ -12,6 +12,7 @@ import (
 
 type DaoInterface interface {
 	CreateJob(job *Job) error
+	GetJob(jobId string) error
 	ListJobs(query bson.D) ([]Job, error)
 	DeleteJob(jobID string) error
 	UpdateJob(query, update bson.D) error
@@ -39,6 +40,26 @@ func (d *Dao) CreateJob(job *Job) error {
 	}
 
 	return nil
+}
+
+// GetJob returns the job for the given id
+func (d *Dao) GetJob(jobId string) (*Job, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
+	defer cancel()
+
+	var query = bson.D{{Key: "id", Value: jobId}}
+
+	result := database.Operator.Get(ctx, d.collection, query)
+	if result.Err() != nil {
+		return nil, result.Err()
+	}
+
+	var job Job
+	if err := result.Decode(&job); err != nil {
+		return nil, err
+	}
+
+	return &job, nil
 }
 
 // ListJobs lists jobs from the database
@@ -76,9 +97,7 @@ func (d *Dao) DeleteJob(jobID string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
 	defer cancel()
 
-	query := bson.D{
-		{Key: "id", Value: jobID},
-	}
+	query := bson.D{{Key: "id", Value: jobID}}
 
 	if _, err := database.Operator.Delete(ctx, d.collection, query); err != nil {
 		return err
