@@ -8,4 +8,5 @@ import (
 
 func BecknRouter(router *gin.RouterGroup, clients *clients.Clients) {
 	router.POST("/search", handlers.SendJobs(clients))
+	router.POST("/select", handlers.SendJobFulfillment(clients))
 }
