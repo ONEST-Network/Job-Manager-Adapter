@@ -6,8 +6,8 @@ import (
 	dbInitJobApplication "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/database/mongodb/init-job-application"
 	dbJobApplication "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/database/mongodb/job-application"
 
-	"github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/status/request"
-	"github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/status/response"
+	"github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/onest/status/request"
+	"github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/onest/status/response"
 )
 
 func BuildJobApplicationStatusResponse(payload *request.StatusRequest, initJobApplication *dbInitJobApplication.InitJobApplication, jobApplication *dbJobApplication.JobApplication) *response.StatusResponse {

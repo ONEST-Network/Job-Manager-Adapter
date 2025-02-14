@@ -8,8 +8,8 @@ import (
 	"github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/clients"
 	"github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/config"
 	"github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/database/mongodb/job"
-	"github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/search/request"
-	"github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/search/response"
+	"github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/onest/search/request"
+	"github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/onest/search/response"
 	"github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/utils"
 )
 
@@ -63,10 +63,7 @@ func BuildSearchJobsResponse(clients *clients.Clients, payload *request.SearchRe
 	}
 
 	for i, job := range jobs {
-		business, err := clients.BusinessClient.GetBusiness(job.BusinessID)
-		if err != nil {
-			return nil, fmt.Errorf("failed to get %s business, %v", job.BusinessID, err)
-		}
+		business := job.Business
 
 		businessStateCode, err := utils.GetStateCode(business.Location.State)
 		if err != nil {
@@ -88,6 +85,10 @@ func BuildSearchJobsResponse(clients *clients.Clients, payload *request.SearchRe
 			return nil, fmt.Errorf("failed to get job city code for %s, %v", job.Location.State, err)
 		}
 
+		if job.Location.Coordinates.Coordinates == nil {
+			return nil, fmt.Errorf("job location coordinates are missing for job %s", job.ID)
+		}
+
 		res.Message.Catalog.Providers[0].Locations = append(res.Message.Catalog.Providers[0].Locations, response.Locations{
 			ID:      fmt.Sprintf("L%d", i+1),
 			Address: job.Location.Address,
@@ -100,7 +101,7 @@ func BuildSearchJobsResponse(clients *clients.Clients, payload *request.SearchRe
 				Name: job.Location.State,
 				Code: jobStateCode,
 			},
-			GPS: fmt.Sprintf("%f,%f", job.Location.Coordinates.Latitude, job.Location.Coordinates.Longitute),
+			GPS: fmt.Sprintf("%f,%f", job.Location.Coordinates.Coordinates[1], job.Location.Coordinates.Coordinates[0]),
 		})
 
 		item := response.Items{

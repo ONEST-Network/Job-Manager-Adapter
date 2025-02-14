@@ -9,4 +9,8 @@ import (
 func BecknRouter(router *gin.RouterGroup, clients *clients.Clients) {
 	router.POST("/search", handlers.SendJobs(clients))
 	router.POST("/select", handlers.SendJobFulfillment(clients))
+	router.POST("/init", handlers.InitializeJobApplication(clients))
+	router.POST("/confirm", handlers.ConfirmJobApplication(clients))
+	router.POST("/status", handlers.JobApplicationStatus(clients))
+	router.POST("/cancel", handlers.WithdrawJobApplication(clients))
 }

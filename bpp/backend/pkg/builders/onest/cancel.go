@@ -4,8 +4,8 @@ import (
 	"time"
 
 	dbJobApplication "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/database/mongodb/job-application"
-	"github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/cancel/request"
-	"github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/cancel/response"
+	"github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/onest/cancel/request"
+	"github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/onest/cancel/response"
 )
 
 func BuildWithdrawJobApplicationResponse(payload *request.CancelRequest, jobApplication *dbJobApplication.JobApplication) *response.CancelResponse {

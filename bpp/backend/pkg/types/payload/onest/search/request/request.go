@@ -43,6 +43,18 @@ type ItemDescriptor struct {
 }
 type Item struct {
 	Descriptor ItemDescriptor `json:"descriptor"`
+	Tags       []ItemTags     `json:"item_tags"`
+}
+type Descriptor struct {
+	Code string `json:"code"`
+}
+type ItemList struct {
+	Descriptor Descriptor `json:"descriptor"`
+	Value      string     `json:"value"`
+}
+type ItemTags struct {
+	Descriptor Descriptor `json:"descriptor"`
+	List       []ItemList `json:"list"`
 }
 type TagsDescriptor struct {
 	Code string `json:"code"`
@@ -55,11 +67,41 @@ type Tags struct {
 	Descriptor TagsDescriptor `json:"descriptor"`
 	List       []List         `json:"list"`
 }
+type ProviderDescriptor struct {
+	Name string `json:"name"`
+}
+type Provider struct {
+	Descriptor ProviderDescriptor  `json:"descriptor"`
+	Locations  []ProviderLocations `json:"locations"`
+}
 type Intent struct {
-	Payment Payment `json:"payment"`
-	Item    Item    `json:"item"`
-	Tags    []Tags  `json:"tags"`
+	Payment  Payment  `json:"payment"`
+	Item     Item     `json:"item"`
+	Provider Provider `json:"provider"`
+	Tags     []Tags   `json:"tags"`
 }
 type Message struct {
 	Intent Intent `json:"intent"`
+}
+type ProviderCity struct {
+	Code string `json:"code"`
+}
+type ProviderState struct {
+	Code string `json:"code"`
+}
+type ProviderPostalCode struct {
+	Code string `json:"code"`
+}
+type ProviderAddress struct {
+	Code string `json:"code"`
+}
+type Coordinates struct {
+	Latitude  float64 `bson:"latitude" json:"latitude"`
+	Longitute float64 `bson:"longitude" json:"longitude"`
+}
+type ProviderLocations struct {
+	City        ProviderCity       `json:"city"`
+	State       ProviderState      `json:"state"`
+	PostalCode  ProviderPostalCode `json:"postalCode"`
+	Coordinates Coordinates        `json:"coordinates"`
 }

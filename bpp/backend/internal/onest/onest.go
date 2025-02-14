@@ -16,30 +16,30 @@ import (
 	dbInitJobApplication "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/database/mongodb/init-job-application"
 	dbJobApplication "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/database/mongodb/job-application"
 
-	searchrequest "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/search/request"
-	searchrequestack "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/search/request-ack"
-	searchresponseack "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/search/response-ack"
+	searchrequest "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/onest/search/request"
+	searchrequestack "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/onest/search/request-ack"
+	searchresponseack "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/onest/search/response-ack"
 
-	selectrequest "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/select/request"
-	selectrequestack "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/select/request-ack"
-	selectresponseack "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/select/response-ack"
+	selectrequest "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/onest/select/request"
+	selectrequestack "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/onest/select/request-ack"
+	selectresponseack "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/onest/select/response-ack"
 
-	initrequest "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/init/request"
-	initrequestack "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/init/request-ack"
-	initresponseack "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/init/response-ack"
+	initrequest "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/onest/init/request"
+	initrequestack "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/onest/init/request-ack"
+	initresponseack "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/onest/init/response-ack"
 
-	confirmrequest "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/confirm/request"
-	confirmrequestack "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/confirm/request-ack"
-	confirmresponseack "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/confirm/response-ack"
+	confirmrequest "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/onest/confirm/request"
+	confirmrequestack "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/onest/confirm/request-ack"
+	confirmresponseack "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/onest/confirm/response-ack"
 
-	statusrequest "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/status/request"
-	statusrequestack "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/status/request-ack"
-	statusresponse "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/status/response"
-	statusresponseack "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/status/response-ack"
+	statusrequest "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/onest/status/request"
+	statusrequestack "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/onest/status/request-ack"
+	statusresponse "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/onest/status/response"
+	statusresponseack "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/onest/status/response-ack"
 
-	cancelrequest "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/cancel/request"
-	cancelrequestack "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/cancel/request-ack"
-	cancelresponseack "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/cancel/response-ack"
+	cancelrequest "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/onest/cancel/request"
+	cancelrequestack "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/onest/cancel/request-ack"
+	cancelresponseack "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/onest/cancel/response-ack"
 )
 
 type Interface interface {
@@ -103,21 +103,7 @@ func (j *Onest) SendJobsAck(body io.ReadCloser) (*searchrequest.SearchRequest, *
 }
 
 func (j *Onest) SendJobs(payload *searchrequest.SearchRequest) {
-	var (
-		searchTerm = payload.Message.Intent.Item.Descriptor.Name
-		query      = bson.D{}
-	)
-
-	if searchTerm != "" {
-		query = bson.D{
-			{"$or", bson.A{
-				bson.D{{"name", bson.D{{"$regex", searchTerm}, {"$options", "i"}}}},
-				bson.D{{"description", bson.D{{"$regex", searchTerm}, {"$options", "i"}}}},
-			}},
-		}
-	}
-
-	jobs, err := j.clients.JobClient.ListJobs(query)
+	jobs, err := j.clients.JobClient.ListJobs(getSearchFilter(payload))
 	if err != nil {
 		logrus.Errorf("Failed to list jobs, %v", err)
 		return
@@ -172,7 +158,7 @@ func (j *Onest) SendJobFulfillmentAck(body io.ReadCloser) (*selectrequest.Select
 		return nil, getError("No items found", ".message.order.items", "30004")
 	}
 
-	jobs, err := j.clients.JobClient.ListJobs(bson.D{{"id", payload.Message.Order.Items[0].ID}})
+	jobs, err := j.clients.JobClient.ListJobs(bson.D{{Key: "id", Value: payload.Message.Order.Items[0].ID}})
 	if err != nil {
 		return nil, getError(err.Error(), "", "")
 	}
@@ -433,7 +419,7 @@ func (j *Onest) JobApplicationStatusAck(body io.ReadCloser) (*statusrequest.Stat
 }
 
 func (j *Onest) JobApplicationStatus(payload *statusrequest.StatusRequest) {
-	initJobApplications, err := j.clients.InitJobApplicationClient.ListInitJobApplication(bson.D{{"transaction_id", payload.Context.TransactionID}})
+	initJobApplications, err := j.clients.InitJobApplicationClient.ListInitJobApplication(bson.D{{Key: "transaction_id", Value: payload.Context.TransactionID}})
 	if err != nil {
 		logrus.Errorf("Failed to list init job applications, %v", err)
 		return
@@ -503,8 +489,10 @@ func (j *Onest) WithdrawJobApplicationAck(body io.ReadCloser) (*cancelrequest.Ca
 
 func (j *Onest) WithdrawJobApplication(payload *cancelrequest.CancelRequest) {
 	var (
-		query  = bson.D{{"id", payload.Message.OrderID}}
-		update = bson.D{{"$set", bson.D{{"status", dbJobApplication.JobApplicationStatusWithdrawn}}}}
+		query  = bson.D{{Key: "id", Value: payload.Message.OrderID}}
+		update = bson.D{{Key: "$set", Value: bson.D{
+			{Key: "status", Value: dbJobApplication.JobApplicationStatusWithdrawn},
+		}}}
 	)
 
 	jobApplication, err := j.clients.JobApplicationClient.UpdateJobApplicationAndReturnDocument(query, update)
@@ -628,4 +616,82 @@ func getJobApplicationDocuments(initJobApplication *dbInitJobApplication.InitJob
 	}
 
 	return documents
+}
+
+func getSearchFilter(payload *searchrequest.SearchRequest) bson.D {
+	var (
+		role      = payload.Message.Intent.Item.Descriptor.Name
+		provider  = payload.Message.Intent.Provider.Descriptor.Name
+		locations = payload.Message.Intent.Provider.Locations
+		tags      = payload.Message.Intent.Item.Tags
+		query     = bson.D{}
+	)
+
+	if role != "" {
+		query = append(query, bson.E{
+			Key: "$or", Value: bson.A{
+				bson.D{{Key: "name", Value: bson.D{{Key: "$regex", Value: role}, {Key: "$options", Value: "i"}}}},
+				bson.D{{Key: "description", Value: bson.D{{Key: "$regex", Value: role}, {Key: "$options", Value: "i"}}}},
+			},
+		})
+	}
+
+	if provider != "" {
+		query = append(query, bson.E{Key: "business.name", Value: provider})
+	}
+
+	if locations != nil {
+		var location = locations[0]
+
+		if location.City.Code != "" {
+			query = append(query, bson.E{Key: "location.city", Value: location.City.Code})
+		}
+		if location.State.Code != "" {
+			query = append(query, bson.E{Key: "location.state", Value: location.State.Code})
+		}
+		if location.PostalCode.Code != "" {
+			query = append(query, bson.E{Key: "location.postal_code", Value: location.PostalCode.Code})
+			query = append(query, bson.E{Key: "$or", Value: bson.A{bson.D{{
+				Key: "location.address",
+				Value: bson.D{
+					{Key: "$regex", Value: location.PostalCode.Code},
+					{Key: "$options", Value: "i"},
+				},
+			}}}})
+		}
+		if location.Coordinates.Longitute != 0 && location.Coordinates.Latitude != 0 {
+			query = append(query, bson.E{
+				Key: "address.coordinates", Value: bson.D{
+					{Key: "$nearSphere", Value: bson.D{
+						{Key: "$geometry", Value: bson.D{
+							{Key: "type", Value: "Point"},
+							{
+								Key: "coordinates",
+								Value: bson.A{
+									location.Coordinates.Longitute,
+									location.Coordinates.Latitude,
+								},
+							},
+						}},
+						{Key: "$maxDistance", Value: 5000}, // 5 km in meters
+					}},
+				},
+			})
+		}
+	}
+
+	for _, tag := range tags {
+		if tag.Descriptor.Code == "JOB_DETAILS" {
+			for _, listItem := range tag.List {
+				if listItem.Descriptor.Code == "INDUSTRY_TYPE" {
+					query = append(query, bson.E{Key: "business.industry", Value: listItem.Value})
+				}
+				if listItem.Descriptor.Code == "JOB_TYPE" {
+					query = append(query, bson.E{Key: "type", Value: listItem.Value})
+				}
+			}
+		}
+	}
+
+	return query
 }
