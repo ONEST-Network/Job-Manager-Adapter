@@ -4,8 +4,8 @@ import (
 	"time"
 
 	"github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/config"
-	"github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/select/request"
-	"github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/select/response"
+	"github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/onest/select/request"
+	"github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/onest/select/response"
 )
 
 func BuildSendJobFulfillmentResponse(payload *request.SelectRequest) *response.SelectResponse {

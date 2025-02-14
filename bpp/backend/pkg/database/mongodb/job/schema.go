@@ -1,19 +1,21 @@
 package job
 
+import "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/database/mongodb/business"
+
 // Job represents a job in the database
 type Job struct {
-	ID             string      `bson:"id"`
-	Name           string      `bson:"name" json:"name"`
-	Description    string      `bson:"description" json:"description"`
-	Type           JobType     `bson:"type" json:"type"`
-	Vacancies      int         `bson:"vacancies" json:"vacancies"`
-	SalaryRange    SalaryRange `bson:"salary_range" json:"salaryRange"`
-	ApplicationIDs []string    `bson:"application_ids"`
-	BusinessID     string      `bson:"business_id" json:"businessId"`
-	WorkHours      WorkHours   `bson:"work_hours" json:"workHours"`
-	WorkDays       WorkDays    `bson:"work_days" json:"workDays"`
-	Eligibility    Eligibility `bson:"eligibility" json:"eligibility"`
-	Location       Location    `bson:"location" json:"location"`
+	ID             string            `bson:"id"`
+	Name           string            `bson:"name" json:"name"`
+	Description    string            `bson:"description" json:"description"`
+	Type           JobType           `bson:"type" json:"type"`
+	Vacancies      int               `bson:"vacancies" json:"vacancies"`
+	SalaryRange    SalaryRange       `bson:"salary_range" json:"salaryRange"`
+	ApplicationIDs []string          `bson:"application_ids"`
+	Business       business.Business `bson:"business" json:"business"`
+	WorkHours      WorkHours         `bson:"work_hours" json:"workHours"`
+	WorkDays       WorkDays          `bson:"work_days" json:"workDays"`
+	Eligibility    Eligibility       `bson:"eligibility" json:"eligibility"`
+	Location       Location          `bson:"location" json:"location"`
 }
 
 // SalaryRange represents the salary range of a job
@@ -25,8 +27,8 @@ type SalaryRange struct {
 type JobType string
 
 const (
-	JobTypeFullTime   JobType = "full_time"
-	JobTypePartTime   JobType = "part_time"
+	JobTypeFullTime   JobType = "full-time"
+	JobTypePartTime   JobType = "part-time"
 	JobTypeContract   JobType = "contract"
 	JobTypeInternship JobType = "internship"
 )
@@ -93,13 +95,13 @@ type Location struct {
 	Coordinates Coordinates `bson:"coordinates" json:"coordinates"`
 	Address     string      `bson:"address" json:"address"`
 	Street      string      `bson:"street" json:"street"`
-	PostalCode  string      `bson:"postal_code" json:"postalCode"`
-	City        string      `bson:"city" json:"city"`
-	State       string      `bson:"state" json:"state"`
+	PostalCode  string      `bson:"postal_code" json:"postalCode"` // Postal code, for example: '560102'
+	City        string      `bson:"city" json:"city"`              // STD code, for example: 'std:080'
+	State       string      `bson:"state" json:"state"`            // State code, for example: 'IN-KA'
 }
 
-// Coordinates represents the latitude and longitude of a location
+// Coordinates represents the longitude and latitude of a location
 type Coordinates struct {
-	Latitude  float64 `bson:"latitude" json:"latitude"`
-	Longitute float64 `bson:"longitude" json:"longitude"`
+	Type        string    `bson:"type" json:"type"`               // GeoJSON type, it shall be equal to 'Point'
+	Coordinates []float64 `bson:"coordinates" json:"coordinates"` // longitude, latitude
 }

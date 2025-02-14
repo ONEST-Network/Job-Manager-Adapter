@@ -33,7 +33,7 @@ func (d *Dao) GetBusiness(id string) (*Business, error) {
 	defer cancel()
 
 	var business Business
-	if err := d.collection.FindOne(ctx, bson.D{{"id", id}}).Decode(&business); err != nil {
+	if err := d.collection.FindOne(ctx, bson.D{{Key: "id", Value: id}}).Decode(&business); err != nil {
 		return nil, err
 	}
 
