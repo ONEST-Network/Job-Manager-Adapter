@@ -4,8 +4,8 @@ import (
 	"time"
 
 	"github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/config"
-	confirmrequest "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/confirm/request"
-	confirmresponse "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/confirm/response"
+	confirmrequest "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/onest/confirm/request"
+	confirmresponse "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/onest/confirm/response"
 )
 
 func BuildConfirmJobApplicationResponse(payload *confirmrequest.ConfirmRequest) *confirmresponse.ConfirmResponse {

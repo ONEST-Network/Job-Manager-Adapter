@@ -39,18 +39,18 @@ const (
 	IndustryOther                        Industry = "Other"
 )
 
-// Location represents the location of a job
+// Location represents the location of a business
 type Location struct {
 	Coordinates Coordinates `bson:"coordinates" json:"coordinates"`
 	Address     string      `bson:"address" json:"address"`
 	Street      string      `bson:"street" json:"street"`
-	PostalCode  string      `bson:"postal_code" json:"postalCode"`
-	City        string      `bson:"city" json:"city"`
-	State       string      `bson:"state" json:"state"`
+	PostalCode  string      `bson:"postal_code" json:"postalCode"` // Postal code, for example: '560102'
+	City        string      `bson:"city" json:"city"`              // STD code, for example: 'std:080'
+	State       string      `bson:"state" json:"state"`            // State code, for example: 'IN-KA'
 }
 
-// Coordinates represents the latitude and longitude of a location
+// Coordinates represents the longitude and latitude of a location
 type Coordinates struct {
-	Latitude  float64 `bson:"latitude" json:"latitude"`
-	Longitute float64 `bson:"longitude" json:"longitude"`
+	Type        string    `bson:"type" json:"type"`               // GeoJSON type, it shall be equal to 'Point'
+	Coordinates []float64 `bson:"coordinates" json:"coordinates"` // longitude, latitude
 }

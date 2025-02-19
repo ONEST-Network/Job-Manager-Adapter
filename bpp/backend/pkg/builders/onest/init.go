@@ -4,8 +4,8 @@ import (
 	"time"
 
 	"github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/config"
-	initrequest "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/init/request"
-	initresponse "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/init/response"
+	initrequest "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/onest/init/request"
+	initresponse "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/onest/init/response"
 )
 
 func BuildInitializeJobApplicationResponse(payload *initrequest.InitRequest) *initresponse.InitResponse {

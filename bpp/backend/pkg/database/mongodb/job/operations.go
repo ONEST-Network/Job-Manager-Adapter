@@ -6,8 +6,10 @@ import (
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 
 	database "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/database/mongodb"
+	"github.com/sirupsen/logrus"
 )
 
 type DaoInterface interface {
@@ -23,6 +25,9 @@ type Dao struct {
 }
 
 func NewJobDao(collection *mongo.Collection) *Dao {
+	if err := ensure2dsphereIndex(collection, "coordinates_2dsphere_index"); err != nil {
+		logrus.Fatalf("Failed to create 2dsphere index for %s collection, %v", collection.Name(), err)
+	}
 	return &Dao{
 		collection: collection,
 	}
@@ -103,5 +108,40 @@ func (d *Dao) DeleteJob(jobID string) error {
 		return err
 	}
 
+	return nil
+}
+
+func ensure2dsphereIndex(collection *mongo.Collection, indexName string) error {
+	ctx := context.Background()
+
+	// Check if the index already exists
+	cursor, err := collection.Indexes().List(ctx)
+	if err != nil {
+		return err
+	}
+	defer cursor.Close(ctx)
+
+	for cursor.Next(ctx) {
+		var index bson.M
+		if err := cursor.Decode(&index); err != nil {
+			return err
+		}
+		if name, ok := index["name"].(string); ok && name == indexName {
+			// index already exists
+			return nil
+		}
+	}
+
+	// Create the 2dsphere index
+	indexModel := mongo.IndexModel{
+		Keys:    bson.D{{Key: "location.coordinates", Value: "2dsphere"}}, // Index on location.coordinates field
+		Options: options.Index().SetName(indexName),
+	}
+
+	if _, err = collection.Indexes().CreateOne(ctx, indexModel); err != nil {
+		return err
+	}
+
+	logrus.Infof("2dsphere index %s created for %s collection", indexName, collection.Name())
 	return nil
 }
