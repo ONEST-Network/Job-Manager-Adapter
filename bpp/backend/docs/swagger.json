@@ -13,6 +13,9 @@
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "ONEST Network"
+                ],
                 "summary": "Cancel job application",
                 "parameters": [
                     {
@@ -49,6 +52,9 @@
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "ONEST Network"
                 ],
                 "summary": "Confirm job application submission",
                 "parameters": [
@@ -87,6 +93,9 @@
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "ONEST Network"
+                ],
                 "summary": "Initialize job application",
                 "parameters": [
                     {
@@ -123,6 +132,9 @@
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "Job Application"
                 ],
                 "summary": "Update job application status",
                 "parameters": [
@@ -165,6 +177,9 @@
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "Job"
+                ],
                 "summary": "Create job",
                 "parameters": [
                     {
@@ -198,6 +213,9 @@
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "Job"
                 ],
                 "summary": "Get job applications",
                 "parameters": [
@@ -237,6 +255,9 @@
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "ONEST Network"
+                ],
                 "summary": "Send jobs",
                 "parameters": [
                     {
@@ -274,6 +295,9 @@
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "ONEST Network"
+                ],
                 "summary": "Send job fulfillment",
                 "parameters": [
                     {
@@ -310,6 +334,9 @@
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "ONEST Network"
                 ],
                 "summary": "Send job application current status",
                 "parameters": [
