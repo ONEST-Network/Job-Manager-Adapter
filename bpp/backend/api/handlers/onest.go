@@ -11,6 +11,7 @@ import (
 
 // @Summary	Send jobs
 // @Description	Send jobs
+// @Tags ONEST Network
 // @Accept		json
 // @Produce		json
 // @Param request body request.SearchRequest true "request body"
@@ -37,6 +38,7 @@ func SendJobs(clients *clients.Clients) gin.HandlerFunc {
 
 // @Summary	Send job fulfillment
 // @Description	Send job fulfillment
+// @Tags ONEST Network
 // @Accept		json
 // @Produce		json
 // @Param request body request.SelectRequest true "request body"
@@ -63,6 +65,7 @@ func SendJobFulfillment(clients *clients.Clients) gin.HandlerFunc {
 
 // @Summary	Initialize job application
 // @Description	Initialize job application
+// @Tags ONEST Network
 // @Accept		json
 // @Produce		json
 // @Param request body request.InitRequest true "request body"
@@ -89,6 +92,7 @@ func InitializeJobApplication(clients *clients.Clients) gin.HandlerFunc {
 
 // @Summary	Confirm job application submission
 // @Description	Confirm job application submission
+// @Tags ONEST Network
 // @Accept		json
 // @Produce		json
 // @Param request body request.ConfirmRequest true "request body"
@@ -115,6 +119,7 @@ func ConfirmJobApplication(clients *clients.Clients) gin.HandlerFunc {
 
 // @Summary	Send job application current status
 // @Description	Send job application current status
+// @Tags ONEST Network
 // @Accept		json
 // @Produce		json
 // @Param request body request.StatusRequest true "request body"
@@ -141,6 +146,7 @@ func JobApplicationStatus(clients *clients.Clients) gin.HandlerFunc {
 
 // @Summary	Cancel job application
 // @Description	Cancel job application
+// @Tags ONEST Network
 // @Accept		json
 // @Produce		json
 // @Param request body request.CancelRequest true "request body"

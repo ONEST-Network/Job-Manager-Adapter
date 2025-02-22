@@ -12,6 +12,7 @@ import (
 
 // @Summary	Update job application status
 // @Description	Update a job application's status
+// @Tags Job Application
 // @Accept		json
 // @Produce		json
 // @Param id path string true "Job Application ID"

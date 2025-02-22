@@ -25,6 +25,9 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "ONEST Network"
+                ],
                 "summary": "Cancel job application",
                 "parameters": [
                     {
@@ -61,6 +64,9 @@ const docTemplate = `{
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "ONEST Network"
                 ],
                 "summary": "Confirm job application submission",
                 "parameters": [
@@ -99,6 +105,9 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "ONEST Network"
+                ],
                 "summary": "Initialize job application",
                 "parameters": [
                     {
@@ -135,6 +144,9 @@ const docTemplate = `{
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "Job Application"
                 ],
                 "summary": "Update job application status",
                 "parameters": [
@@ -177,6 +189,9 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "Job"
+                ],
                 "summary": "Create job",
                 "parameters": [
                     {
@@ -210,6 +225,9 @@ const docTemplate = `{
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "Job"
                 ],
                 "summary": "Get job applications",
                 "parameters": [
@@ -249,6 +267,9 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "ONEST Network"
+                ],
                 "summary": "Send jobs",
                 "parameters": [
                     {
@@ -286,6 +307,9 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "ONEST Network"
+                ],
                 "summary": "Send job fulfillment",
                 "parameters": [
                     {
@@ -322,6 +346,9 @@ const docTemplate = `{
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "ONEST Network"
                 ],
                 "summary": "Send job application current status",
                 "parameters": [

@@ -12,6 +12,7 @@ import (
 
 // @Summary	Create job
 // @Description	Create a job posting
+// @Tags Job
 // @Accept		json
 // @Produce		json
 // @Param request body jobPayload.CreateJobRequest true "request body"
@@ -35,6 +36,7 @@ func CreateJob(clients *clients.Clients) gin.HandlerFunc {
 
 // @Summary	Get job applications
 // @Description	Get job applications
+// @Tags Job
 // @Accept		json
 // @Produce		json
 // @Param id path string true "Job ID"
