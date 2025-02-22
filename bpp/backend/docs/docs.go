@@ -16,6 +16,46 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/business/add": {
+            "post": {
+                "description": "Add a business",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Business"
+                ],
+                "summary": "Add business",
+                "parameters": [
+                    {
+                        "description": "request body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/business.AddBusinessRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/cancel": {
             "post": {
                 "description": "Cancel job application",
@@ -380,6 +420,127 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "business.AddBusinessRequest": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "gstIndexNumber": {
+                    "type": "string"
+                },
+                "industry": {
+                    "$ref": "#/definitions/business.Industry"
+                },
+                "location": {
+                    "$ref": "#/definitions/business.Location"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "pictureUrls": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "business.Coordinates": {
+            "type": "object",
+            "properties": {
+                "coordinates": {
+                    "description": "longitude, latitude",
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    }
+                },
+                "type": {
+                    "description": "GeoJSON type, it shall be equal to 'Point'",
+                    "type": "string"
+                }
+            }
+        },
+        "business.Industry": {
+            "type": "string",
+            "enum": [
+                "RetailAndEcommerce",
+                "FoodAndBeverages",
+                "HealthAndWellness",
+                "EducationAndTraining",
+                "ProfessionalServices",
+                "Manufacturing",
+                "HospitalityAndTourism",
+                "ArtsAndEntertainment",
+                "TechnologyAndSoftware",
+                "ConstructionAndRealEstate",
+                "TransportationAndLogistics",
+                "AgricultureAndFarming",
+                "FinanceAndInsurance",
+                "EnergyAndUtilities",
+                "NonProfitAndSocialEnterprise",
+                "MediaAndPublishing",
+                "Automotive",
+                "FashionAndLifestyle",
+                "SportsAndRecreation",
+                "Other"
+            ],
+            "x-enum-varnames": [
+                "IndustryRetailAndEcommerce",
+                "IndustryFoodAndBeverages",
+                "IndustryHealthAndWellness",
+                "IndustryEducationAndTraining",
+                "IndustryProfessionalServices",
+                "IndustryManufacturing",
+                "IndustryHospitalityAndTourism",
+                "IndustryArtsAndEntertainment",
+                "IndustryTechnologyAndSoftware",
+                "IndustryConstructionAndRealEstate",
+                "IndustryTransportationAndLogistics",
+                "IndustryAgricultureAndFarming",
+                "IndustryFinanceAndInsurance",
+                "IndustryEnergyAndUtilities",
+                "IndustryNonProfitAndSocialEnterprise",
+                "IndustryMediaAndPublishing",
+                "IndustryAutomotive",
+                "IndustryFashionAndLifestyle",
+                "IndustrySportsAndRecreation",
+                "IndustryOther"
+            ]
+        },
+        "business.Location": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "city": {
+                    "description": "STD code, for example: 'std:080'",
+                    "type": "string"
+                },
+                "coordinates": {
+                    "$ref": "#/definitions/business.Coordinates"
+                },
+                "postalCode": {
+                    "description": "Postal code, for example: '560102'",
+                    "type": "string"
+                },
+                "state": {
+                    "description": "State code, for example: 'IN-KA'",
+                    "type": "string"
+                },
+                "street": {
+                    "type": "string"
+                }
+            }
+        },
         "github_com_ONEST-Network_Whatsapp-Chatbot_bpp_backend_pkg_database_mongodb_job-application.ApplicantDetails": {
             "type": "object",
             "properties": {

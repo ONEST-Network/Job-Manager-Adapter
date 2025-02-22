@@ -11,9 +11,6 @@ import (
 type DaoInterface interface {
 	GetBusiness(id string) (*Business, error)
 	CreateBusiness(business *Business) error
-	ListBusiness(query bson.D) ([]Business, error)
-	DeleteBusiness(businessID, name string) error
-	UpdateBusiness(query, update bson.D) error
 }
 
 type Dao struct {
@@ -38,4 +35,15 @@ func (d *Dao) GetBusiness(id string) (*Business, error) {
 	}
 
 	return &business, nil
+}
+
+func (d *Dao) CreateBusiness(business *Business) error {
+	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
+	defer cancel()
+
+	if _, err := d.collection.InsertOne(ctx, business); err != nil {
+		return err
+	}
+
+	return nil
 }

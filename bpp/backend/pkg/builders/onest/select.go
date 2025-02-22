@@ -3,7 +3,6 @@ package onest
 import (
 	"time"
 
-	"github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/config"
 	"github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/onest/select/request"
 	"github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/onest/select/response"
 )
@@ -16,8 +15,8 @@ func BuildSendJobFulfillmentResponse(payload *request.SelectRequest) *response.S
 			Version:       payload.Context.Version,
 			BapID:         payload.Context.BapID,
 			BapURI:        payload.Context.BapURI,
-			BppID:         config.Config.BppId,
-			BppURI:        config.Config.BppUri,
+			BppID:         payload.Context.BppID,
+			BppURI:        payload.Context.BppURI,
 			TransactionID: payload.Context.TransactionID,
 			MessageID:     payload.Context.MessageID,
 			Location: response.Location{
