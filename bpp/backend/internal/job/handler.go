@@ -13,6 +13,7 @@ import (
 
 type Interface interface {
 	CreateJob(payload *jobPayload.CreateJobRequest) error
+	GetJobApplications(jobID string) ([]jobPayload.GetJobApplicationsResponse, error)
 }
 
 type Job struct {
@@ -26,7 +27,7 @@ func NewJob(clients *clients.Clients) Interface {
 }
 
 func (j *Job) CreateJob(payload *jobPayload.CreateJobRequest) error {
-	logrus.Infof("Received request to create a new job for business: %s", payload.BusinessID)
+	logrus.Infof("[Request]: Received request to create a new job for business: %s", payload.BusinessID)
 
 	business, err := j.clients.BusinessClient.GetBusiness(payload.BusinessID)
 	if err != nil {
@@ -34,23 +35,51 @@ func (j *Job) CreateJob(payload *jobPayload.CreateJobRequest) error {
 	}
 
 	var job = &jobDb.Job{
-		ID:             random.GetRandomString(7),
-		Name:           payload.Name,
-		Description:    payload.Description,
-		Type:           payload.Type,
-		Vacancies:      payload.Vacancies,
-		SalaryRange:    payload.SalaryRange,
-		ApplicationIDs: payload.ApplicationIDs,
-		WorkHours:      payload.WorkHours,
-		WorkDays:       payload.WorkDays,
-		Eligibility:    payload.Eligibility,
-		Location:       payload.Location,
-		Business:       *business,
+		ID:          random.GetRandomString(7),
+		Name:        payload.Name,
+		Description: payload.Description,
+		Type:        payload.Type,
+		Vacancies:   payload.Vacancies,
+		SalaryRange: payload.SalaryRange,
+		WorkHours:   payload.WorkHours,
+		WorkDays:    payload.WorkDays,
+		Eligibility: payload.Eligibility,
+		Location:    payload.Location,
+		Business:    *business,
 	}
 
 	if err := j.clients.JobClient.CreateJob(job); err != nil {
+		logrus.Errorf("Failed to create job, %v", err)
 		return err
 	}
 
 	return nil
+}
+
+func (j *Job) GetJobApplications(jobID string) ([]jobPayload.GetJobApplicationsResponse, error) {
+	var jobApplicationsResponse []jobPayload.GetJobApplicationsResponse
+
+	logrus.Infof("[Request]: Received request to get applications for %s job", jobID)
+
+	job, err := j.clients.JobClient.GetJob(jobID)
+	if err != nil {
+		logrus.Errorf("Failed to get job %s, %v", jobID, err)
+		return nil, fmt.Errorf("failed to get job %s, %v", jobID, err)
+	}
+
+	for _, applicationId := range job.ApplicationIDs {
+		jobApplication, err := j.clients.JobApplicationClient.GetJobApplication(applicationId)
+		if err != nil {
+			logrus.Errorf("Failed to get job application %s, %v", applicationId, err)
+			return nil, fmt.Errorf("failed to get job application %s, %v", applicationId, err)
+		}
+
+		jobApplicationsResponse = append(jobApplicationsResponse, jobPayload.GetJobApplicationsResponse{
+			ID:               applicationId,
+			ApplicantDetails: jobApplication.ApplicantDetails,
+			Status:           jobApplication.Status,
+		})
+	}
+
+	return jobApplicationsResponse, nil
 }
