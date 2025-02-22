@@ -3,7 +3,6 @@ package onest
 import (
 	"time"
 
-	"github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/config"
 	initrequest "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/onest/init/request"
 	initresponse "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/onest/init/response"
 )
@@ -16,8 +15,8 @@ func BuildInitializeJobApplicationResponse(payload *initrequest.InitRequest) *in
 			Version:       payload.Context.Version,
 			BapID:         payload.Context.BapID,
 			BapURI:        payload.Context.BapURI,
-			BppID:         config.Config.BppId,
-			BppURI:        config.Config.BppUri,
+			BppID:         payload.Context.BppID,
+			BppURI:        payload.Context.BppURI,
 			TransactionID: payload.Context.TransactionID,
 			MessageID:     payload.Context.MessageID,
 			Location: initresponse.Location{

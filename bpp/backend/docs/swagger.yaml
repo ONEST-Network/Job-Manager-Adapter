@@ -1,4 +1,98 @@
 definitions:
+  business.AddBusinessRequest:
+    properties:
+      description:
+        type: string
+      email:
+        type: string
+      gstIndexNumber:
+        type: string
+      industry:
+        $ref: '#/definitions/business.Industry'
+      location:
+        $ref: '#/definitions/business.Location'
+      name:
+        type: string
+      phone:
+        type: string
+      pictureUrls:
+        items:
+          type: string
+        type: array
+    type: object
+  business.Coordinates:
+    properties:
+      coordinates:
+        description: longitude, latitude
+        items:
+          type: number
+        type: array
+      type:
+        description: GeoJSON type, it shall be equal to 'Point'
+        type: string
+    type: object
+  business.Industry:
+    enum:
+    - RetailAndEcommerce
+    - FoodAndBeverages
+    - HealthAndWellness
+    - EducationAndTraining
+    - ProfessionalServices
+    - Manufacturing
+    - HospitalityAndTourism
+    - ArtsAndEntertainment
+    - TechnologyAndSoftware
+    - ConstructionAndRealEstate
+    - TransportationAndLogistics
+    - AgricultureAndFarming
+    - FinanceAndInsurance
+    - EnergyAndUtilities
+    - NonProfitAndSocialEnterprise
+    - MediaAndPublishing
+    - Automotive
+    - FashionAndLifestyle
+    - SportsAndRecreation
+    - Other
+    type: string
+    x-enum-varnames:
+    - IndustryRetailAndEcommerce
+    - IndustryFoodAndBeverages
+    - IndustryHealthAndWellness
+    - IndustryEducationAndTraining
+    - IndustryProfessionalServices
+    - IndustryManufacturing
+    - IndustryHospitalityAndTourism
+    - IndustryArtsAndEntertainment
+    - IndustryTechnologyAndSoftware
+    - IndustryConstructionAndRealEstate
+    - IndustryTransportationAndLogistics
+    - IndustryAgricultureAndFarming
+    - IndustryFinanceAndInsurance
+    - IndustryEnergyAndUtilities
+    - IndustryNonProfitAndSocialEnterprise
+    - IndustryMediaAndPublishing
+    - IndustryAutomotive
+    - IndustryFashionAndLifestyle
+    - IndustrySportsAndRecreation
+    - IndustryOther
+  business.Location:
+    properties:
+      address:
+        type: string
+      city:
+        description: 'STD code, for example: ''std:080'''
+        type: string
+      coordinates:
+        $ref: '#/definitions/business.Coordinates'
+      postalCode:
+        description: 'Postal code, for example: ''560102'''
+        type: string
+      state:
+        description: 'State code, for example: ''IN-KA'''
+        type: string
+      street:
+        type: string
+    type: object
   github_com_ONEST-Network_Whatsapp-Chatbot_bpp_backend_pkg_database_mongodb_job-application.ApplicantDetails:
     properties:
       age:
@@ -2453,6 +2547,32 @@ definitions:
 info:
   contact: {}
 paths:
+  /business/add:
+    post:
+      consumes:
+      - application/json
+      description: Add a business
+      parameters:
+      - description: request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/business.AddBusinessRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Add business
+      tags:
+      - Business
   /cancel:
     post:
       consumes:

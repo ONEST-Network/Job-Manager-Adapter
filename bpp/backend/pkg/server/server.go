@@ -31,6 +31,9 @@ func SetupServer(clients *clients.Clients) *gin.Engine {
 	routes.BaseRouter(baseRouter, clients)
 	routes.BecknRouter(baseRouter, clients)
 
+	businessRouter := server.Group("/business")
+	routes.BusinessRouter(businessRouter, clients)
+
 	jobRouter := server.Group("/job")
 	routes.JobRouter(jobRouter, clients)
 
