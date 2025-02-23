@@ -1,0 +1,20 @@
+fastapi-job-recommender
+├── src
+│   ├── api
+│   │   ├── endpoints.py
+│   │   └── models.py
+│   ├── core
+│   │   ├── config.py
+│   │   └── logging.py
+│   ├── services
+│   │   └── job_service.py
+│   ├── utils
+│   │   └── embeddings.py
+│   └── main.py
+├── tests
+│   ├── test_api.py
+│   └── test_services.py
+├── .env
+├── requirements.txt
+├── pyproject.toml
+└── README.md
