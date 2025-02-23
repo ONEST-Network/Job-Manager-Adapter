@@ -16,6 +16,78 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/business/add": {
+            "post": {
+                "description": "Add a business",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Business"
+                ],
+                "summary": "Add business",
+                "parameters": [
+                    {
+                        "description": "request body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/business.AddBusinessRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/business/{id}/jobs": {
+            "get": {
+                "description": "List jobs for a business",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Business"
+                ],
+                "summary": "List Jobs",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/business.ListJobsResponse"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/cancel": {
             "post": {
                 "description": "Cancel job application",
@@ -24,6 +96,9 @@ const docTemplate = `{
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "ONEST Network"
                 ],
                 "summary": "Cancel job application",
                 "parameters": [
@@ -62,6 +137,9 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "ONEST Network"
+                ],
                 "summary": "Confirm job application submission",
                 "parameters": [
                     {
@@ -99,6 +177,9 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "ONEST Network"
+                ],
                 "summary": "Initialize job application",
                 "parameters": [
                     {
@@ -127,6 +208,50 @@ const docTemplate = `{
                 }
             }
         },
+        "/job-application/{id}/status": {
+            "post": {
+                "description": "Update a job application's status",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Job Application"
+                ],
+                "summary": "Update job application status",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Job Application ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "request body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/jobapplication.UpdateJobApplicationStatusRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/job/create": {
             "post": {
                 "description": "Create a job posting",
@@ -135,6 +260,9 @@ const docTemplate = `{
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "Job"
                 ],
                 "summary": "Create job",
                 "parameters": [
@@ -161,6 +289,47 @@ const docTemplate = `{
                 }
             }
         },
+        "/job/{id}/applications": {
+            "get": {
+                "description": "Get job applications",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Job"
+                ],
+                "summary": "Get job applications",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Job ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/job.GetJobApplicationsResponse"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/search": {
             "post": {
                 "description": "Send jobs",
@@ -169,6 +338,9 @@ const docTemplate = `{
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "ONEST Network"
                 ],
                 "summary": "Send jobs",
                 "parameters": [
@@ -207,6 +379,9 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "ONEST Network"
+                ],
                 "summary": "Send job fulfillment",
                 "parameters": [
                     {
@@ -244,6 +419,9 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "ONEST Network"
+                ],
                 "summary": "Send job application current status",
                 "parameters": [
                     {
@@ -274,6 +452,233 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "business.AddBusinessRequest": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "gstIndexNumber": {
+                    "type": "string"
+                },
+                "industry": {
+                    "$ref": "#/definitions/business.Industry"
+                },
+                "location": {
+                    "$ref": "#/definitions/business.Location"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "pictureUrls": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "business.Coordinates": {
+            "type": "object",
+            "properties": {
+                "coordinates": {
+                    "description": "longitude, latitude",
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    }
+                },
+                "type": {
+                    "description": "GeoJSON type, it shall be equal to 'Point'",
+                    "type": "string"
+                }
+            }
+        },
+        "business.Industry": {
+            "type": "string",
+            "enum": [
+                "RetailAndEcommerce",
+                "FoodAndBeverages",
+                "HealthAndWellness",
+                "EducationAndTraining",
+                "ProfessionalServices",
+                "Manufacturing",
+                "HospitalityAndTourism",
+                "ArtsAndEntertainment",
+                "TechnologyAndSoftware",
+                "ConstructionAndRealEstate",
+                "TransportationAndLogistics",
+                "AgricultureAndFarming",
+                "FinanceAndInsurance",
+                "EnergyAndUtilities",
+                "NonProfitAndSocialEnterprise",
+                "MediaAndPublishing",
+                "Automotive",
+                "FashionAndLifestyle",
+                "SportsAndRecreation",
+                "Other"
+            ],
+            "x-enum-varnames": [
+                "IndustryRetailAndEcommerce",
+                "IndustryFoodAndBeverages",
+                "IndustryHealthAndWellness",
+                "IndustryEducationAndTraining",
+                "IndustryProfessionalServices",
+                "IndustryManufacturing",
+                "IndustryHospitalityAndTourism",
+                "IndustryArtsAndEntertainment",
+                "IndustryTechnologyAndSoftware",
+                "IndustryConstructionAndRealEstate",
+                "IndustryTransportationAndLogistics",
+                "IndustryAgricultureAndFarming",
+                "IndustryFinanceAndInsurance",
+                "IndustryEnergyAndUtilities",
+                "IndustryNonProfitAndSocialEnterprise",
+                "IndustryMediaAndPublishing",
+                "IndustryAutomotive",
+                "IndustryFashionAndLifestyle",
+                "IndustrySportsAndRecreation",
+                "IndustryOther"
+            ]
+        },
+        "business.ListJobsResponse": {
+            "type": "object",
+            "properties": {
+                "applicationIds": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "description": {
+                    "type": "string"
+                },
+                "eligibility": {
+                    "$ref": "#/definitions/job.Eligibility"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "location": {
+                    "$ref": "#/definitions/job.Location"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "salaryRange": {
+                    "$ref": "#/definitions/job.SalaryRange"
+                },
+                "type": {
+                    "$ref": "#/definitions/job.JobType"
+                },
+                "vacancies": {
+                    "type": "integer"
+                },
+                "workDays": {
+                    "$ref": "#/definitions/job.WorkDays"
+                },
+                "workHours": {
+                    "$ref": "#/definitions/job.WorkHours"
+                }
+            }
+        },
+        "business.Location": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "city": {
+                    "description": "STD code, for example: 'std:080'",
+                    "type": "string"
+                },
+                "coordinates": {
+                    "$ref": "#/definitions/business.Coordinates"
+                },
+                "postalCode": {
+                    "description": "Postal code, for example: '560102'",
+                    "type": "string"
+                },
+                "state": {
+                    "description": "State code, for example: 'IN-KA'",
+                    "type": "string"
+                },
+                "street": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_ONEST-Network_Whatsapp-Chatbot_bpp_backend_pkg_database_mongodb_job-application.ApplicantDetails": {
+            "type": "object",
+            "properties": {
+                "age": {
+                    "type": "integer"
+                },
+                "documents": {
+                    "$ref": "#/definitions/github_com_ONEST-Network_Whatsapp-Chatbot_bpp_backend_pkg_database_mongodb_job-application.Documents"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "experience": {
+                    "$ref": "#/definitions/github_com_ONEST-Network_Whatsapp-Chatbot_bpp_backend_pkg_database_mongodb_job-application.Experience"
+                },
+                "gender": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_ONEST-Network_Whatsapp-Chatbot_bpp_backend_pkg_database_mongodb_job-application.Document": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_ONEST-Network_Whatsapp-Chatbot_bpp_backend_pkg_database_mongodb_job-application.Documents": {
+            "type": "object",
+            "properties": {
+                "aadharCard": {
+                    "$ref": "#/definitions/github_com_ONEST-Network_Whatsapp-Chatbot_bpp_backend_pkg_database_mongodb_job-application.Document"
+                },
+                "drivingLicense": {
+                    "$ref": "#/definitions/github_com_ONEST-Network_Whatsapp-Chatbot_bpp_backend_pkg_database_mongodb_job-application.Document"
+                },
+                "panCard": {
+                    "$ref": "#/definitions/github_com_ONEST-Network_Whatsapp-Chatbot_bpp_backend_pkg_database_mongodb_job-application.Document"
+                },
+                "passport": {
+                    "$ref": "#/definitions/github_com_ONEST-Network_Whatsapp-Chatbot_bpp_backend_pkg_database_mongodb_job-application.Document"
+                },
+                "resume": {
+                    "$ref": "#/definitions/github_com_ONEST-Network_Whatsapp-Chatbot_bpp_backend_pkg_database_mongodb_job-application.Document"
+                }
+            }
+        },
+        "github_com_ONEST-Network_Whatsapp-Chatbot_bpp_backend_pkg_database_mongodb_job-application.Experience": {
+            "type": "object",
+            "properties": {
+                "years": {
+                    "type": "integer"
+                }
+            }
+        },
         "github_com_ONEST-Network_Whatsapp-Chatbot_bpp_backend_pkg_types_payload_onest_cancel_request.City": {
             "type": "object",
             "properties": {
@@ -3125,12 +3530,6 @@ const docTemplate = `{
         "job.CreateJobRequest": {
             "type": "object",
             "properties": {
-                "applicationIds": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
                 "businessId": {
                     "type": "string"
                 },
@@ -3223,6 +3622,20 @@ const docTemplate = `{
                 "GenderFemale"
             ]
         },
+        "job.GetJobApplicationsResponse": {
+            "type": "object",
+            "properties": {
+                "applicantDetails": {
+                    "$ref": "#/definitions/github_com_ONEST-Network_Whatsapp-Chatbot_bpp_backend_pkg_database_mongodb_job-application.ApplicantDetails"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "status": {
+                    "$ref": "#/definitions/jobapplication.JobApplicationStatus"
+                }
+            }
+        },
         "job.JobType": {
             "type": "string",
             "enum": [
@@ -3267,10 +3680,10 @@ const docTemplate = `{
         "job.SalaryRange": {
             "type": "object",
             "properties": {
-                "Max": {
+                "max": {
                     "type": "integer"
                 },
-                "Min": {
+                "min": {
                     "type": "integer"
                 }
             }
@@ -3293,6 +3706,36 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "start": {
+                    "type": "string"
+                }
+            }
+        },
+        "jobapplication.JobApplicationStatus": {
+            "type": "string",
+            "enum": [
+                "APPLICATION_ACCEPTED",
+                "APPLICATION_REJECTED",
+                "ASSESSMENT_IN_PROGRESS",
+                "OFFER_REJECTED",
+                "OFFER_ACCEPTED",
+                "OFFER_EXTENDED",
+                "CANCELLED"
+            ],
+            "x-enum-varnames": [
+                "JobApplicationStatusApplicationAccepted",
+                "JobApplicationStatusApplicationRejected",
+                "JobApplicationStatusAssessmentInProgress",
+                "JobApplicationStatusOfferRejected",
+                "JobApplicationStatusOfferAccepted",
+                "JobApplicationStatusOfferExtended",
+                "JobApplicationStatusCancelled"
+            ]
+        },
+        "jobapplication.UpdateJobApplicationStatusRequest": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "description": "@Enum(APPLICATION_ACCEPTED, APPLICATION_REJECTED, ASSESSMENT_IN_PROGRESS, OFFER_REJECTED, OFFER_ACCEPTED, OFFER_EXTENDED, CANCELLED)",
                     "type": "string"
                 }
             }

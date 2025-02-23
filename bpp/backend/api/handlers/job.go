@@ -12,6 +12,7 @@ import (
 
 // @Summary	Create job
 // @Description	Create a job posting
+// @Tags Job
 // @Accept		json
 // @Produce		json
 // @Param request body jobPayload.CreateJobRequest true "request body"
@@ -22,13 +23,36 @@ func CreateJob(clients *clients.Clients) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var payload jobPayload.CreateJobRequest
 		if err := json.NewDecoder(c.Request.Body).Decode(&payload); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			c.JSON(http.StatusBadRequest, err.Error())
 			return
 		}
 
 		if err := job.NewJob(clients).CreateJob(&payload); err != nil {
-			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "internal server error"})
+			c.AbortWithStatusJSON(http.StatusInternalServerError, err.Error())
 			return
 		}
+	}
+}
+
+// @Summary	Get job applications
+// @Description	Get job applications
+// @Tags Job
+// @Accept		json
+// @Produce		json
+// @Param id path string true "Job ID"
+// @Success 200 {array} jobPayload.GetJobApplicationsResponse
+// @Failure 500 {object} string
+// @Router	/job/{id}/applications	[get]
+func GetJobApplications(clients *clients.Clients) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		jobID := c.Param("id")
+
+		applications, err := job.NewJob(clients).GetJobApplications(jobID)
+		if err != nil {
+			c.AbortWithStatusJSON(http.StatusInternalServerError, err.Error())
+			return
+		}
+
+		c.JSON(http.StatusOK, applications)
 	}
 }

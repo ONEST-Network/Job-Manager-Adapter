@@ -34,7 +34,6 @@ import (
 
 	statusrequest "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/onest/status/request"
 	statusrequestack "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/onest/status/request-ack"
-	statusresponse "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/onest/status/response"
 	statusresponseack "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/onest/status/response-ack"
 
 	cancelrequest "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/onest/cancel/request"
@@ -359,7 +358,7 @@ func (j *Onest) ConfirmJobApplication(payload *confirmrequest.ConfirmRequest, in
 			Phone:     initJobApplication.ApplicantDetails.Phone,
 			Email:     initJobApplication.ApplicantDetails.Email,
 		},
-		Status:    dbJobApplication.JobApplicationStatusSubmitted,
+		Status:    dbJobApplication.JobApplicationStatusApplicationAccepted,
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
 	}); err != nil {
@@ -419,24 +418,13 @@ func (j *Onest) JobApplicationStatusAck(body io.ReadCloser) (*statusrequest.Stat
 }
 
 func (j *Onest) JobApplicationStatus(payload *statusrequest.StatusRequest) {
-	initJobApplications, err := j.clients.InitJobApplicationClient.ListInitJobApplication(bson.D{{Key: "transaction_id", Value: payload.Context.TransactionID}})
+	jobApplication, err := j.clients.JobApplicationClient.GetJobApplication(payload.Message.Order.ID)
 	if err != nil {
-		logrus.Errorf("Failed to list init job applications, %v", err)
+		logrus.Errorf("Failed to get %s job application, %v", payload.Message.Order.ID, err)
 		return
 	}
 
-	var response *statusresponse.StatusResponse
-	if initJobApplications != nil {
-		response = onest.BuildJobApplicationStatusResponse(payload, &initJobApplications[0], nil)
-	} else {
-		jobApplication, err := j.clients.JobApplicationClient.GetJobApplication(payload.Message.Order.ID)
-		if err != nil {
-			logrus.Errorf("Failed to get %s job application, %v", payload.Message.Order.ID, err)
-			return
-		}
-
-		response = onest.BuildJobApplicationStatusResponse(payload, nil, jobApplication)
-	}
+	response := onest.BuildJobApplicationStatusResponse(payload, jobApplication)
 
 	var statusResponseAck statusresponseack.StatusResponseAck
 	if err := j.clients.ApiClient.ApiCall(response, payload.Context.BapURI+"/on_status", &statusResponseAck, "POST"); err != nil {
@@ -491,7 +479,7 @@ func (j *Onest) WithdrawJobApplication(payload *cancelrequest.CancelRequest) {
 	var (
 		query  = bson.D{{Key: "id", Value: payload.Message.OrderID}}
 		update = bson.D{{Key: "$set", Value: bson.D{
-			{Key: "status", Value: dbJobApplication.JobApplicationStatusWithdrawn},
+			{Key: "status", Value: dbJobApplication.JobApplicationStatusCancelled},
 		}}}
 	)
 

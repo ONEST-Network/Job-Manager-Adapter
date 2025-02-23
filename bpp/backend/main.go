@@ -8,6 +8,7 @@ import (
 	"github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/log"
 	"github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/proxy"
 	"github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/server"
+	"github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/utils"
 	"github.com/kelseyhightower/envconfig"
 	"github.com/sirupsen/logrus"
 )
@@ -15,6 +16,9 @@ import (
 func main() {
 	// init logrus logger
 	log.InitLogger()
+
+	// log runtime attributes
+	utils.LogRuntimeAttributes()
 
 	// parse env variables
 	if err := envconfig.Process("", &config.Config); err != nil {

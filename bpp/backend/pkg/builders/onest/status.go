@@ -3,21 +3,13 @@ package onest
 import (
 	"time"
 
-	dbInitJobApplication "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/database/mongodb/init-job-application"
 	dbJobApplication "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/database/mongodb/job-application"
 
 	"github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/onest/status/request"
 	"github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/onest/status/response"
 )
 
-func BuildJobApplicationStatusResponse(payload *request.StatusRequest, initJobApplication *dbInitJobApplication.InitJobApplication, jobApplication *dbJobApplication.JobApplication) *response.StatusResponse {
-	var order response.Order
-	if initJobApplication != nil {
-		order = getOrderForInitJobApplication(initJobApplication)
-	} else {
-		order = getOrderForJobApplication(jobApplication)
-	}
-
+func BuildJobApplicationStatusResponse(payload *request.StatusRequest, jobApplication *dbJobApplication.JobApplication) *response.StatusResponse {
 	return &response.StatusResponse{
 		Context: response.Context{
 			Domain:        payload.Context.Domain,
@@ -41,73 +33,35 @@ func BuildJobApplicationStatusResponse(payload *request.StatusRequest, initJobAp
 			TTL:       "PT30S",
 		},
 		Message: response.Message{
-			Order: order,
-		},
-	}
-}
-
-func getOrderForInitJobApplication(initJobApplication *dbInitJobApplication.InitJobApplication) response.Order {
-	return response.Order{
-		ID:     initJobApplication.JobID,
-		Status: "Active",
-		Provider: response.Provider{
-			ID: "1",
-		},
-		Items: []response.Items{
-			{
-				ID:             "",
-				FulfillmentIds: []string{"F1"},
-				Time: response.Time{
-					Range: response.Range{
-						Start: initJobApplication.CreatedAt.UTC().Format(time.RFC3339),
-						End:   initJobApplication.CreatedAt.Add(time.Hour * 24 * 30).UTC().Format(time.RFC3339),
+			Order: response.Order{
+				ID:     jobApplication.ID,
+				Status: string(jobApplication.Status),
+				Provider: response.Provider{
+					ID: "1",
+				},
+				Items: []response.Items{
+					{
+						ID:             jobApplication.JobID,
+						FulfillmentIds: []string{"F1"},
+						Time: response.Time{
+							Range: response.Range{
+								Start: jobApplication.CreatedAt.UTC().Format(time.RFC3339),
+								End:   jobApplication.CreatedAt.Add(time.Hour * 24 * 30).UTC().Format(time.RFC3339),
+							},
+						},
 					},
 				},
-			},
-		},
-		Fulfillments: []response.Fulfillments{
-			{
-				ID:   "F1",
-				Type: "lead & recruitment",
-				State: response.State{
-					Descriptor: response.Descriptor{
-						Code: string(dbJobApplication.JobApplicationStatusInProgress),
+				Fulfillments: []response.Fulfillments{
+					{
+						ID:   "F1",
+						Type: "lead & recruitment",
+						State: response.State{
+							Descriptor: response.Descriptor{
+								Code: string(jobApplication.Status),
+							},
+							UpdatedAt: jobApplication.UpdatedAt.UTC().Format(time.RFC3339),
+						},
 					},
-					UpdatedAt: initJobApplication.CreatedAt.UTC().Format(time.RFC3339),
-				},
-			},
-		},
-	}
-}
-
-func getOrderForJobApplication(jobApplication *dbJobApplication.JobApplication) response.Order {
-	return response.Order{
-		ID:     jobApplication.ID,
-		Status: string(jobApplication.Status),
-		Provider: response.Provider{
-			ID: "1",
-		},
-		Items: []response.Items{
-			{
-				ID:             jobApplication.JobID,
-				FulfillmentIds: []string{"F1"},
-				Time: response.Time{
-					Range: response.Range{
-						Start: jobApplication.CreatedAt.UTC().Format(time.RFC3339),
-						End:   jobApplication.CreatedAt.Add(time.Hour * 24 * 30).UTC().Format(time.RFC3339),
-					},
-				},
-			},
-		},
-		Fulfillments: []response.Fulfillments{
-			{
-				ID:   "F1",
-				Type: "lead & recruitment",
-				State: response.State{
-					Descriptor: response.Descriptor{
-						Code: string(jobApplication.Status),
-					},
-					UpdatedAt: jobApplication.UpdatedAt.UTC().Format(time.RFC3339),
 				},
 			},
 		},
