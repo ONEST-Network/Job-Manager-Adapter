@@ -75,6 +75,33 @@ definitions:
     - IndustryFashionAndLifestyle
     - IndustrySportsAndRecreation
     - IndustryOther
+  business.ListJobsResponse:
+    properties:
+      applicationIds:
+        items:
+          type: string
+        type: array
+      description:
+        type: string
+      eligibility:
+        $ref: '#/definitions/job.Eligibility'
+      id:
+        type: string
+      location:
+        $ref: '#/definitions/job.Location'
+      name:
+        type: string
+      salaryRange:
+        $ref: '#/definitions/job.SalaryRange'
+      type:
+        $ref: '#/definitions/job.JobType'
+      vacancies:
+        type: integer
+      workDays:
+        $ref: '#/definitions/job.WorkDays'
+      workHours:
+        $ref: '#/definitions/job.WorkHours'
+    type: object
   business.Location:
     properties:
       address:
@@ -2084,9 +2111,9 @@ definitions:
     type: object
   job.SalaryRange:
     properties:
-      Max:
+      max:
         type: integer
-      Min:
+      min:
         type: integer
     type: object
   job.WorkDays:
@@ -2547,6 +2574,27 @@ definitions:
 info:
   contact: {}
 paths:
+  /business/{id}/jobs:
+    get:
+      consumes:
+      - application/json
+      description: List jobs for a business
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/business.ListJobsResponse'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: List Jobs
+      tags:
+      - Business
   /business/add:
     post:
       consumes:

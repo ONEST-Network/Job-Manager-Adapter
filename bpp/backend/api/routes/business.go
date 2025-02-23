@@ -8,4 +8,5 @@ import (
 
 func BusinessRouter(router *gin.RouterGroup, clients *clients.Clients) {
 	router.POST("/add", handlers.AddBusiness(clients))
+	router.GET("/:id/jobs", handlers.ListJobs(clients))
 }

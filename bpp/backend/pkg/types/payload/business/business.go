@@ -1,6 +1,9 @@
 package business
 
-import "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/database/mongodb/business"
+import (
+	"github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/database/mongodb/business"
+	"github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/database/mongodb/job"
+)
 
 type AddBusinessRequest struct {
 	Name           string            `json:"name"`
@@ -11,4 +14,18 @@ type AddBusinessRequest struct {
 	GSTIndexNumber string            `json:"gstIndexNumber"`
 	Location       business.Location `json:"location"`
 	Industry       business.Industry `json:"industry"`
+}
+
+type ListJobsResponse struct {
+	ID             string          `json:"id"`
+	Name           string          `json:"name"`
+	Description    string          `json:"description"`
+	Type           job.JobType     `json:"type"`
+	Vacancies      int             `json:"vacancies"`
+	SalaryRange    job.SalaryRange `json:"salaryRange"`
+	ApplicationIDs []string        `json:"applicationIds"`
+	WorkHours      job.WorkHours   `json:"workHours"`
+	WorkDays       job.WorkDays    `json:"workDays"`
+	Eligibility    job.Eligibility `json:"eligibility"`
+	Location       job.Location    `json:"location"`
 }

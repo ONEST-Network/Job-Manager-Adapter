@@ -36,3 +36,25 @@ func AddBusiness(clients *clients.Clients) gin.HandlerFunc {
 		c.JSON(http.StatusOK, businessID)
 	}
 }
+
+// @Summary	List Jobs
+// @Description	List jobs for a business
+// @Tags Business
+// @Accept		json
+// @Produce		json
+// @Success 200 {array} businessPayload.ListJobsResponse
+// @Failure 500 {object} string
+// @Router	/business/{id}/jobs	[get]
+func ListJobs(clients *clients.Clients) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		businessID := c.Param("id")
+
+		jobs, err := business.NewBusiness(clients).ListJobs(businessID)
+		if err != nil {
+			c.AbortWithStatusJSON(http.StatusInternalServerError, err.Error())
+			return
+		}
+
+		c.JSON(http.StatusOK, jobs)
+	}
+}
