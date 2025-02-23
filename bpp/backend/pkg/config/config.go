@@ -5,7 +5,7 @@ type Configuration struct {
 	HttpProxy      string   `split_words:"true"`
 	HttpsProxy     string   `split_words:"true"`
 	NoProxy        string   `split_words:"true"`
-	HTTPPort       string   `envconfig:"HTTP_PORT" default:"5000"`
+	HTTPPort       string   `envconfig:"HTTP_PORT" default:"8080"`
 	DbServer       string   `required:"true" split_words:"true"`
 	DbUser         string   `required:"true" split_words:"true"`
 	DbPassword     string   `required:"true" split_words:"true"`
