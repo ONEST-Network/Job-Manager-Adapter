@@ -8,10 +8,12 @@ import (
 	businessPayload "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/business"
 	"github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/utils/random"
 	"github.com/sirupsen/logrus"
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 type Interface interface {
 	AddBusiness(business *businessPayload.AddBusinessRequest) (string, error)
+	ListJobs(businessID string) ([]businessPayload.ListJobsResponse, error)
 }
 
 type Business struct {
@@ -45,4 +47,35 @@ func (b *Business) AddBusiness(payload *businessPayload.AddBusinessRequest) (str
 	}
 
 	return business.ID, nil
+}
+
+func (b *Business) ListJobs(businessID string) ([]businessPayload.ListJobsResponse, error) {
+	logrus.Infof("[Request]: Received request to get jobs for business: %s", businessID)
+
+	var query = bson.D{{Key: "business.id", Value: businessID}}
+
+	jobs, err := b.clients.JobClient.ListJobs(query)
+	if err != nil {
+		logrus.Errorf("Failed to get jobs for business %s, %v", businessID, err)
+		return nil, fmt.Errorf("failed to get jobs for business, %v", err)
+	}
+
+	var listJobsResponse []businessPayload.ListJobsResponse
+	for _, job := range jobs {
+		listJobsResponse = append(listJobsResponse, businessPayload.ListJobsResponse{
+			ID:             job.ID,
+			Name:           job.Name,
+			Description:    job.Description,
+			Type:           job.Type,
+			Vacancies:      job.Vacancies,
+			SalaryRange:    job.SalaryRange,
+			ApplicationIDs: job.ApplicationIDs,
+			WorkHours:      job.WorkHours,
+			WorkDays:       job.WorkDays,
+			Eligibility:    job.Eligibility,
+			Location:       job.Location,
+		})
+	}
+
+	return listJobsResponse, nil
 }

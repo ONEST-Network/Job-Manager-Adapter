@@ -10,7 +10,7 @@ type Job struct {
 	Type           JobType           `bson:"type" json:"type"`
 	Vacancies      int               `bson:"vacancies" json:"vacancies"`
 	SalaryRange    SalaryRange       `bson:"salary_range" json:"salaryRange"`
-	ApplicationIDs []string          `bson:"application_ids"`
+	ApplicationIDs []string          `bson:"application_ids" json:"applicationIds"`
 	Business       business.Business `bson:"business" json:"business"`
 	WorkHours      WorkHours         `bson:"work_hours" json:"workHours"`
 	WorkDays       WorkDays          `bson:"work_days" json:"workDays"`
@@ -20,8 +20,8 @@ type Job struct {
 
 // SalaryRange represents the salary range of a job
 type SalaryRange struct {
-	Min int `bson:"min" json:"Min"`
-	Max int `bson:"max" json:"Max"`
+	Min int `bson:"min" json:"min"`
+	Max int `bson:"max" json:"max"`
 }
 
 type JobType string

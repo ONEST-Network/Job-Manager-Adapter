@@ -56,6 +56,38 @@ const docTemplate = `{
                 }
             }
         },
+        "/business/{id}/jobs": {
+            "get": {
+                "description": "List jobs for a business",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Business"
+                ],
+                "summary": "List Jobs",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/business.ListJobsResponse"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/cancel": {
             "post": {
                 "description": "Cancel job application",
@@ -514,6 +546,47 @@ const docTemplate = `{
                 "IndustrySportsAndRecreation",
                 "IndustryOther"
             ]
+        },
+        "business.ListJobsResponse": {
+            "type": "object",
+            "properties": {
+                "applicationIds": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "description": {
+                    "type": "string"
+                },
+                "eligibility": {
+                    "$ref": "#/definitions/job.Eligibility"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "location": {
+                    "$ref": "#/definitions/job.Location"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "salaryRange": {
+                    "$ref": "#/definitions/job.SalaryRange"
+                },
+                "type": {
+                    "$ref": "#/definitions/job.JobType"
+                },
+                "vacancies": {
+                    "type": "integer"
+                },
+                "workDays": {
+                    "$ref": "#/definitions/job.WorkDays"
+                },
+                "workHours": {
+                    "$ref": "#/definitions/job.WorkHours"
+                }
+            }
         },
         "business.Location": {
             "type": "object",
@@ -3607,10 +3680,10 @@ const docTemplate = `{
         "job.SalaryRange": {
             "type": "object",
             "properties": {
-                "Max": {
+                "max": {
                     "type": "integer"
                 },
-                "Min": {
+                "min": {
                     "type": "integer"
                 }
             }
