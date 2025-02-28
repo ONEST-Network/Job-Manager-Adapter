@@ -18,8 +18,6 @@ type WorkerProfile struct {
 // Location represents the location of a job
 type Location struct {
 	Coordinates Coordinates `bson:"coordinates" json:"coordinates"`
-	Address     string      `bson:"address" json:"address"`
-	Street      string      `bson:"street" json:"street"`
 	PostalCode  string      `bson:"postal_code" json:"postalCode"`
 	City        string      `bson:"city" json:"city"`
 	State       string      `bson:"state" json:"state"`

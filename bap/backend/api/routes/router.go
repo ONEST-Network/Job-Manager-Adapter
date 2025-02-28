@@ -27,3 +27,9 @@ func RegisterOnestRoutes(router *gin.Engine, handler *handlers.OnestHandler) {
         group.POST("/cancel", handler.Cancel())
     }
 }
+
+// Add this new function to register job recommendation routes
+func JobRecommendationRouter(router *gin.RouterGroup, clients *clients.Clients) {
+    jobRecommendationHandler := handlers.NewJobRecommendationHandler(clients)
+    router.POST("/recommend_jobs", jobRecommendationHandler.GetJobRecommendations)
+}

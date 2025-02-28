@@ -28,7 +28,8 @@ func SetupServer(clients *clients.Clients) *gin.Engine {
 	baseRouter := server.Group("/")
 	routes.BaseRouter(baseRouter, clients)
 	routes.BecknRouter(baseRouter, clients)
-
+	routes.JobRecommendationRouter(baseRouter, clients)
+	
 	return server
 }
 

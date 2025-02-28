@@ -35,12 +35,15 @@ func main() {
 	// initialize the server
 	server := server.SetupServer(clients)
 
+	// Initialize job sync from BPP side
+	jobSync := utils.NewJobSync(clients, 5*time.Minute)
+    jobSync.Start()
+    defer jobSync.Stop()
+
 	// start the server
 	if err := server.Run(fmt.Sprintf(":%s", config.Config.HTTPPort)); err != nil {
 		logrus.Fatal(err)
 	}
-
-	jobSync := utils.NewJobSync(clients, 5*time.Minute)
-    jobSync.Start()
-    defer jobSync.Stop()
 }
+
+// Write an api in bap/backend/main.go to call this /recommend_jobs with required params
