@@ -7,6 +7,8 @@ definitions:
         type: string
       gstIndexNumber:
         type: string
+      id:
+        type: string
       industry:
         $ref: '#/definitions/business.Industry'
       location:
@@ -2612,8 +2614,6 @@ paths:
       responses:
         "200":
           description: OK
-          schema:
-            type: string
         "500":
           description: Internal Server Error
           schema:

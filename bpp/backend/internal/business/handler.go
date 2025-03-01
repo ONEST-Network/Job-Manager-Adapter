@@ -6,13 +6,12 @@ import (
 	"github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/clients"
 	businessDb "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/database/mongodb/business"
 	businessPayload "github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/business"
-	"github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/utils/random"
 	"github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
 )
 
 type Interface interface {
-	AddBusiness(business *businessPayload.AddBusinessRequest) (string, error)
+	AddBusiness(business *businessPayload.AddBusinessRequest) error
 	ListJobs(businessID string) ([]businessPayload.ListJobsResponse, error)
 }
 
@@ -26,11 +25,22 @@ func NewBusiness(clients *clients.Clients) Interface {
 	}
 }
 
-func (b *Business) AddBusiness(payload *businessPayload.AddBusinessRequest) (string, error) {
+func (b *Business) AddBusiness(payload *businessPayload.AddBusinessRequest) error {
 	logrus.Infof("[Request]: Received request to add a new business: %s", payload.Name)
 
+	businesses, err := b.clients.BusinessClient.ListBusinesses(bson.D{{Key: "id", Value: payload.ID}})
+	if err != nil {
+		logrus.Errorf("Failed to get businesses with id %s, %v", payload.ID, err)
+		return fmt.Errorf("failed to get businesses with id %s, %v", payload.ID, err)
+	}
+
+	if len(businesses) > 0 {
+		logrus.Errorf("Business with id %s already exists", payload.ID)
+		return fmt.Errorf("business with id %s already exists", payload.ID)
+	}
+
 	var business = &businessDb.Business{
-		ID:             random.GetRandomString(7),
+		ID:             payload.ID,
 		Name:           payload.Name,
 		Phone:          payload.Phone,
 		Email:          payload.Email,
@@ -42,11 +52,11 @@ func (b *Business) AddBusiness(payload *businessPayload.AddBusinessRequest) (str
 	}
 
 	if err := b.clients.BusinessClient.CreateBusiness(business); err != nil {
-		logrus.Errorf("Failed to create a new business, %v", err)
-		return "", fmt.Errorf("failed to create a new business, %v", err)
+		logrus.Errorf("Failed to create %s business, %v", payload.ID, err)
+		return fmt.Errorf("failed to create %s business, %v", payload.ID, err)
 	}
 
-	return business.ID, nil
+	return nil
 }
 
 func (b *Business) ListJobs(businessID string) ([]businessPayload.ListJobsResponse, error) {

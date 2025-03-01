@@ -42,10 +42,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
+                        "description": "OK"
                     },
                     "500": {
                         "description": "Internal Server Error",
@@ -462,6 +459,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "gstIndexNumber": {
+                    "type": "string"
+                },
+                "id": {
                     "type": "string"
                 },
                 "industry": {
