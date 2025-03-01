@@ -16,7 +16,7 @@ import (
 // @Accept		json
 // @Produce		json
 // @Param request body businessPayload.AddBusinessRequest true "request body"
-// @Success 200 {string} string
+// @Success 200
 // @Failure 500 {object} string
 // @Router	/business/add	[post]
 func AddBusiness(clients *clients.Clients) gin.HandlerFunc {
@@ -27,13 +27,10 @@ func AddBusiness(clients *clients.Clients) gin.HandlerFunc {
 			return
 		}
 
-		businessID, err := business.NewBusiness(clients).AddBusiness(&payload)
-		if err != nil {
+		if err := business.NewBusiness(clients).AddBusiness(&payload); err != nil {
 			c.AbortWithStatusJSON(http.StatusInternalServerError, err.Error())
 			return
 		}
-
-		c.JSON(http.StatusOK, businessID)
 	}
 }
 

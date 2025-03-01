@@ -11,6 +11,7 @@ import (
 type DaoInterface interface {
 	GetBusiness(id string) (*Business, error)
 	CreateBusiness(business *Business) error
+	ListBusinesses(query bson.D) ([]Business, error)
 }
 
 type Dao struct {
@@ -46,4 +47,22 @@ func (d *Dao) CreateBusiness(business *Business) error {
 	}
 
 	return nil
+}
+
+func (d *Dao) ListBusinesses(query bson.D) ([]Business, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
+	defer cancel()
+
+	cursor, err := d.collection.Find(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(ctx)
+
+	var businesses []Business
+	if err := cursor.All(ctx, &businesses); err != nil {
+		return nil, err
+	}
+
+	return businesses, nil
 }
