@@ -199,21 +199,6 @@ class JobRecommendationResponse(BaseModel):
 # Initialize the OpenAI embeddings
 embeddings = OpenAIEmbeddings()
 
-def job_to_text(job: Job, job_id: str) -> str:
-    """Convert a Job object to a text representation for embedding."""
-    skills = ", ".join(job.Eligibility.skills) if job.Eligibility and job.Eligibility.skills else ""
-    location = f"{job.Location.city}, {job.Location.state}" if job.Location else ""
-    salary = f"{job.SalaryRange.min} - {job.SalaryRange.max}" if job.SalaryRange else ""
-    
-    return (
-        f"JobID: {job_id}\n"
-        f"Title: {job.Name}\n"
-        f"Positions: {job.Vacancies}\n"
-        f"Skills: {skills}\n"
-        f"Location: {location}\n"
-        f"Salary: {salary}\n"
-        f"Description: {job.Description}"
-    )
 
 def text_to_job_id(text: str) -> str:
     """Extract job ID from text representation."""
@@ -221,6 +206,57 @@ def text_to_job_id(text: str) -> str:
         if line.startswith("JobID:"):
             return line.replace("JobID:", "").strip()
     return ""
+
+def initialize_faiss_index(jobs):
+    if os.path.exists(INDEX_FILE) and os.path.exists(STORE_FILE):
+        print("Loading existing FAISS index...")
+        index = faiss.read_index(INDEX_FILE)
+        with open(STORE_FILE, "rb") as f:
+            store_data = pickle.load(f)
+        vector_store = FAISS(
+            embedding_function=embeddings,
+            index=index,
+            docstore=store_data["docstore"],
+            index_to_docstore_id=store_data["index_to_docstore_id"],
+        )
+        return vector_store
+    else:
+        print("No existing index found. Building FAISS index...")
+        start = time.time()
+        
+        # index = faiss.IndexFlatL2(EMBEDDING_DIM)
+        index = faiss.IndexPQ(EMBEDDING_DIM)
+        vector_store = FAISS(
+            embedding_function=embeddings,
+            index=index,
+            docstore=InMemoryDocstore({}),
+            index_to_docstore_id={},
+        )
+        job_texts = []
+        for idx, job in enumerate(jobs):
+            text_repr = (
+                f"JobID: {idx}\n"
+                f"Title: {job['title']}\n"
+                f"Positions: {job['positions']}\n"
+                f"Skills: {job['skills']}\n"
+                f"Location: {job['location']}\n"
+                f"Salary: {job['salary']}\n"
+                f"Description: {job.get('jd', '')}"
+            )
+            job_texts.append(text_repr)
+        vectors = embeddings.embed_documents(job_texts)
+        vector_store.add_texts(job_texts, vectors=vectors)
+        faiss.write_index(vector_store.index, INDEX_FILE)
+        store_data = {
+            "docstore": vector_store.docstore,
+            "index_to_docstore_id": vector_store.index_to_docstore_id,
+        }
+        with open(STORE_FILE, "wb") as f:
+            pickle.dump(store_data, f)
+        print(f"Indexing complete in {time.time() - start}s")
+        return vector_store
+
+vector_store = initialize_faiss_index()
 
 @app.post("/recommend_jobs", response_model=JobRecommendationResponse)
 def recommend_jobs(request: JobRecommendationRequest):
@@ -247,36 +283,20 @@ def recommend_jobs(request: JobRecommendationRequest):
         quals_str = "; ".join(user_profile.qualifications)
         user_query += f"Quals: {quals_str}. "
 
+    vector_store = initialize_faiss_index(jobs)
+
     start = time.time()
-
-    # Create temporary FAISS index for this request
-    temp_index = faiss.IndexFlatL2(EMBEDDING_DIM)
-    temp_vector_store = FAISS(
-        embedding_function=embeddings,
-        index=temp_index,
-        docstore=InMemoryDocstore({}),
-        index_to_docstore_id={},
-    )
-
-    # Prepare job texts and ID mappings
-    job_texts = []
     job_id_map = {}  # Maps the index in job_texts to the actual job object
     
     for idx, job in enumerate(jobs):
         job_id = job.ID if job.ID else str(idx)
-        job_text = job_to_text(job, job_id)
-        job_texts.append(job_text)
         job_id_map[job_id] = job
-
-    # Embed job texts
-    vectors = embeddings.embed_documents(job_texts)
-    temp_vector_store.add_texts(job_texts, vectors=vectors)
 
     # Embed user query
     query_embedding = embeddings.embed_query(user_query)
     
     # Get most similar jobs
-    search_results = temp_vector_store.similarity_search_by_vector(query_embedding, k=min(20, len(jobs)))
+    search_results = vector_store.similarity_search_by_vector(query_embedding, k=5)
     
     # Extract job IDs from search results and match with original job objects
     matched_jobs = []
