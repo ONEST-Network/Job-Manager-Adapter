@@ -5,6 +5,8 @@ type SeekerSearchPayload struct {
     Role string `json:"role,omitempty"`
     Provider string `json:"provider,omitempty"`
     Location SeekerLocation `json:"location,omitempty"`
+	Cache bool `json:"cache,omitempty"`
+	LLM bool `json:"llm,omitempty"`
 }
 
 type SeekerLocation struct {

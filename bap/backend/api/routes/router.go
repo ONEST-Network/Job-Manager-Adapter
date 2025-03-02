@@ -7,7 +7,7 @@ import (
 )
 
 func BecknRouter(router *gin.RouterGroup, clients *clients.Clients) {
-	router.POST("/on_search", handlers.StoreJobs(clients))
+	router.POST("/on_search", handlers.SearchJobs(clients))
 	router.POST("/on_select", handlers.SendJobFulfillment(clients))
 	router.POST("/on_init", handlers.InitializeJobApplication(clients))
 	router.POST("/on_confirm", handlers.ConfirmJobApplication(clients))
@@ -16,16 +16,13 @@ func BecknRouter(router *gin.RouterGroup, clients *clients.Clients) {
 }
 
 
-func RegisterOnestRoutes(router *gin.Engine, handler *handlers.OnestHandler) {
-    group := router.Group("/onest")
-    {
-        group.POST("/search", handler.Search())
-        group.POST("/select", handler.Select())
-        group.POST("/init", handler.Init())
-        group.POST("/confirm", handler.Confirm())
-        group.POST("/status", handler.Status())
-        group.POST("/cancel", handler.Cancel())
-    }
+func BPPOnestRoutes(router *gin.RouterGroup, handler *handlers.OnestBPPHandler) {
+    router.POST("/search", handler.Search())
+    router.POST("/select", handler.Select())
+    router.POST("/init", handler.Init())
+    router.POST("/confirm", handler.Confirm())
+    router.POST("/status", handler.Status())
+    router.POST("/cancel", handler.Cancel())
 }
 
 // Add this new function to register job recommendation routes

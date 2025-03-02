@@ -2,14 +2,16 @@ package main
 
 import (
 	"fmt"
-	"time"
+	// "time"
 
 	"github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/pkg/clients"
 	"github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/pkg/config"
 	"github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/pkg/log"
 	"github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/pkg/proxy"
 	"github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/pkg/server"
-	"github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/pkg/utils"
+	"github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/api/handlers"
+	"github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/internal/service"
+	// "github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/pkg/utils"
 	"github.com/kelseyhightower/envconfig"
 	"github.com/sirupsen/logrus"
 )
@@ -32,13 +34,19 @@ func main() {
 	// Set up clients
 	clients := clients.NewClients(jobClient, seekerClient)
 
-	// initialize the server
-	server := server.SetupServer(clients)
+	// Set up the service
+	onestBPPService := service.NewOnestBPPService(clients)
 
-	// Initialize job sync from BPP side
-	jobSync := utils.NewJobSync(clients, 5*time.Minute)
-    jobSync.Start()
-    defer jobSync.Stop()
+	// Set up the BPP proxy
+	bppHandler := handlers.NewOnestBPPHandler(onestBPPService)
+
+	// initialize the server
+	server := server.SetupServer(clients, bppHandler)
+
+	// // Initialize job sync from BPP side
+	// jobSync := utils.NewJobSync(clients, 5*time.Minute)
+    // jobSync.Start()
+    // defer jobSync.Stop()
 
 	// start the server
 	if err := server.Run(fmt.Sprintf(":%s", config.Config.HTTPPort)); err != nil {

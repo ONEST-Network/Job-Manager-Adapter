@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 
+	"github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/api/handlers"
 	"github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/api/middleware"
 	"github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/api/routes"
 	"github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/docs"
@@ -13,7 +14,7 @@ import (
 	dbJob "github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/pkg/database/mongodb/job"
 )
 
-func SetupServer(clients *clients.Clients) *gin.Engine {
+func SetupServer(clients *clients.Clients, bppHandler *handlers.OnestBPPHandler) *gin.Engine {
 	gin.SetMode(gin.ReleaseMode)
 	server := gin.New()
 	server.Use(middleware.DefaultStructuredLogger())
@@ -28,6 +29,7 @@ func SetupServer(clients *clients.Clients) *gin.Engine {
 	baseRouter := server.Group("/")
 	routes.BaseRouter(baseRouter, clients)
 	routes.BecknRouter(baseRouter, clients)
+	routes.BPPOnestRoutes(baseRouter, bppHandler)
 	routes.JobRecommendationRouter(baseRouter, clients)
 	
 	return server

@@ -13,7 +13,7 @@ import (
 )
 
 type JobSync struct {
-	onestService *service.OnestService
+	onestService *service.OnestBPPService
 	interval    time.Duration
 	stopChan    chan struct{}
 }
@@ -46,7 +46,7 @@ func GetEmptySearchRequest() *searchrequest.SearchRequest {
 
 func NewJobSync(clients *clients.Clients, interval time.Duration) *JobSync {
 	return &JobSync{
-		onestService: service.NewOnestService(clients),
+		onestService: service.NewOnestBPPService(clients),
 		interval:    interval,
 		stopChan:    make(chan struct{}),
 	}

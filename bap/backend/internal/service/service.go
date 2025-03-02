@@ -19,17 +19,17 @@ import (
 	statusresponse "github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/pkg/types/payload/onest/status/response"
 )
 
-type OnestService struct {
+type OnestBPPService struct {
     Clients *clients.Clients
 }
 
-func NewOnestService(clients *clients.Clients) *OnestService {
-    return &OnestService{
+func NewOnestBPPService(clients *clients.Clients) *OnestBPPService {
+    return &OnestBPPService{
         Clients: clients,
     }
 }
 
-func (s *OnestService) Search(ctx context.Context, req *searchrequest.SearchRequest) (*searchresponse.SearchResponse, error) {
+func (s *OnestBPPService) Search(ctx context.Context, req *searchrequest.SearchRequest) (*searchresponse.SearchResponse, error) {
     // Make API call to BPP search endpoint
     var response searchresponse.SearchResponse
     err := s.Clients.ApiClient.ApiCall(req, "/search", &response, "POST")
@@ -39,7 +39,7 @@ func (s *OnestService) Search(ctx context.Context, req *searchrequest.SearchRequ
     return &response, nil
 }
 
-func (s *OnestService) Select(ctx context.Context, req *selectrequest.SelectRequest) (*selectresponse.SelectResponse, error) {
+func (s *OnestBPPService) Select(ctx context.Context, req *selectrequest.SelectRequest) (*selectresponse.SelectResponse, error) {
     // Make API call to BPP select endpoint
     var response selectresponse.SelectResponse
     err := s.Clients.ApiClient.ApiCall(req, "/select", &response, "POST")
@@ -49,7 +49,7 @@ func (s *OnestService) Select(ctx context.Context, req *selectrequest.SelectRequ
     return &response, nil
 }
 
-func (s *OnestService) Init(ctx context.Context, req *initrequest.InitRequest) (*initresponse.InitResponse, error) {
+func (s *OnestBPPService) Init(ctx context.Context, req *initrequest.InitRequest) (*initresponse.InitResponse, error) {
     // Make API call to BPP init endpoint
     var response initresponse.InitResponse
     err := s.Clients.ApiClient.ApiCall(req, "/init", &response, "POST")
@@ -59,7 +59,7 @@ func (s *OnestService) Init(ctx context.Context, req *initrequest.InitRequest) (
     return &response, nil
 }
 
-func (s *OnestService) Confirm(ctx context.Context, req *confirmrequest.ConfirmRequest) (*confirmresponse.ConfirmResponse, error) {
+func (s *OnestBPPService) Confirm(ctx context.Context, req *confirmrequest.ConfirmRequest) (*confirmresponse.ConfirmResponse, error) {
     // Make API call to BPP confirm endpoint
     var response confirmresponse.ConfirmResponse
     err := s.Clients.ApiClient.ApiCall(req, "/confirm", &response, "POST")
@@ -69,7 +69,7 @@ func (s *OnestService) Confirm(ctx context.Context, req *confirmrequest.ConfirmR
     return &response, nil
 }
 
-func (s *OnestService) Status(ctx context.Context, req *statusrequest.StatusRequest) (*statusresponse.StatusResponse, error) {
+func (s *OnestBPPService) Status(ctx context.Context, req *statusrequest.StatusRequest) (*statusresponse.StatusResponse, error) {
     // Make API call to BPP status endpoint
     var response statusresponse.StatusResponse
     err := s.Clients.ApiClient.ApiCall(req, "/status", &response, "POST")
@@ -79,7 +79,7 @@ func (s *OnestService) Status(ctx context.Context, req *statusrequest.StatusRequ
     return &response, nil
 }
 
-func (s *OnestService) Cancel(ctx context.Context, req *cancelrequest.CancelRequest) (*cancelresponse.CancelResponse, error) {
+func (s *OnestBPPService) Cancel(ctx context.Context, req *cancelrequest.CancelRequest) (*cancelresponse.CancelResponse, error) {
     // Make API call to BPP cancel endpoint
     var response cancelresponse.CancelResponse
     err := s.Clients.ApiClient.ApiCall(req, "/cancel", &response, "POST")

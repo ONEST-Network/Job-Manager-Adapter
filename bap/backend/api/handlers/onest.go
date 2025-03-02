@@ -19,23 +19,23 @@ import (
 	statusrequest "github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/pkg/types/payload/onest/status/request"
 )
 
-type OnestHandler struct {
-	onestService *service.OnestService
+type OnestBPPHandler struct {
+	onestService *service.OnestBPPService
 }
 
-func NewOnestHandler(onestService *service.OnestService) *OnestHandler {
-	return &OnestHandler{
+func NewOnestBPPHandler(onestService *service.OnestBPPService) *OnestBPPHandler {
+	return &OnestBPPHandler{
 		onestService: onestService,
 	}
 }
 
-func StoreJobs(clients *clients.Clients) gin.HandlerFunc {
+func SearchJobs(clients *clients.Clients) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var statusCode = http.StatusOK
 
 		onest := onest.NewOnestClient(clients)
 
-		payload, ack := onest.SendJobsAck(c.Request.Body)
+		payload, ack := onest.SearchJobsAck(c.Request.Body)
 		if ack.Error.Message != "" {
 			statusCode = http.StatusBadRequest
 			c.JSON(statusCode, ack)
@@ -44,7 +44,7 @@ func StoreJobs(clients *clients.Clients) gin.HandlerFunc {
 
 		c.JSON(statusCode, ack)
 
-		go onest.StoreJobs(payload)
+		go onest.SearchJobs(payload)
 	}
 }
 
@@ -152,7 +152,7 @@ func WithdrawJobApplication(clients *clients.Clients) gin.HandlerFunc {
 BPP APIs
 **/
 
-func (h *OnestHandler) Search() gin.HandlerFunc {
+func (h *OnestBPPHandler) Search() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var payload searchrequest.SeekerSearchPayload
 		if err := c.ShouldBindJSON(&payload); err != nil {
@@ -191,7 +191,7 @@ func (h *OnestHandler) Search() gin.HandlerFunc {
 	}
 }
 
-func (h *OnestHandler) Select() gin.HandlerFunc {
+func (h *OnestBPPHandler) Select() gin.HandlerFunc {
     return func(c *gin.Context) {
         var payload selectrequest.SeekerSelectPayload
         if err := c.ShouldBindJSON(&payload); err != nil {
@@ -224,7 +224,7 @@ func (h *OnestHandler) Select() gin.HandlerFunc {
 	}
 }
 
-func (h *OnestHandler) Init() gin.HandlerFunc {
+func (h *OnestBPPHandler) Init() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var payload initrequest.SeekerInitPayload
 		if err := c.ShouldBindJSON(&payload); err != nil {
@@ -257,7 +257,7 @@ func (h *OnestHandler) Init() gin.HandlerFunc {
 	}
 }
 
-func (h *OnestHandler) Confirm() gin.HandlerFunc {
+func (h *OnestBPPHandler) Confirm() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var payload confirmrequest.SeekerConfirmPayload
 		if err := c.ShouldBindJSON(&payload); err != nil {
@@ -300,7 +300,7 @@ func (h *OnestHandler) Confirm() gin.HandlerFunc {
 	}
 }
 
-func (h *OnestHandler) Status() gin.HandlerFunc {
+func (h *OnestBPPHandler) Status() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var payload statusrequest.SeekerStatusPayload
 		if err := c.ShouldBindJSON(&payload); err != nil {
@@ -333,7 +333,7 @@ func (h *OnestHandler) Status() gin.HandlerFunc {
 	}
 }
 
-func (h *OnestHandler) Cancel() gin.HandlerFunc {
+func (h *OnestBPPHandler) Cancel() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var payload cancelrequest.SeekerCancelPayload
 		if err := c.ShouldBindJSON(&payload); err != nil {

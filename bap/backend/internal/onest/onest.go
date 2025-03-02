@@ -35,8 +35,8 @@ import (
 
 type Interface interface {
 	// search api handlers
-	SendJobsAck(body io.ReadCloser) (*searchresponse.SearchResponse, *searchresponseack.SearchResponseAck)
-	StoreJobs(payload *searchresponse.SearchResponse)
+	SearchJobsAck(body io.ReadCloser) (*searchresponse.SearchResponse, *searchresponseack.SearchResponseAck)
+	SearchJobs(payload *searchresponse.SearchResponse)
 	// select api handlers
 	SendJobFulfillmentAck(body io.ReadCloser) (*selectresponse.SelectResponse, *selectresponseack.SelectResponseAck)
 	SendJobFulfillment(payload *selectresponse.SelectResponse)
@@ -64,7 +64,7 @@ func NewOnestClient(clients *clients.Clients) Interface {
 	}
 }
 
-func (o *Onest) SendJobsAck(body io.ReadCloser) (*searchresponse.SearchResponse, *searchresponseack.SearchResponseAck) {
+func (o *Onest) SearchJobsAck(body io.ReadCloser) (*searchresponse.SearchResponse, *searchresponseack.SearchResponseAck) {
     var (
         payload      searchresponse.SearchResponse
         payloadError *searchresponseack.Error
@@ -98,7 +98,7 @@ func (o *Onest) SendJobsAck(body io.ReadCloser) (*searchresponse.SearchResponse,
     }
 }
 
-func (o *Onest) StoreJobs(payload *searchresponse.SearchResponse) {
+func (o *Onest) SearchJobs(payload *searchresponse.SearchResponse) {
     var jobs []job.Job
     
     // Extract jobs from each provider in the catalog
@@ -245,10 +245,10 @@ func (o *Onest) StoreJobs(payload *searchresponse.SearchResponse) {
     }
 
     // Store jobs in database
-    if err := o.clients.JobClient.CreateJobs(jobs); err != nil {
-        logrus.Errorf("Failed to store jobs: %v", err)
-        return
-    }
+    // if err := o.clients.JobClient.CreateJobs(jobs); err != nil {
+    //     logrus.Errorf("Failed to store jobs: %v", err)
+    //     return
+    // }
 }
 
 func (j *Onest) SendJobFulfillmentAck(body io.ReadCloser) (*selectresponse.SelectResponse, *selectresponseack.SelectResponseAck) {
