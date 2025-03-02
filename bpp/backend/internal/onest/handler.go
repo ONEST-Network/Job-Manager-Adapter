@@ -245,7 +245,7 @@ func (j *Onest) InitializeJobApplication(payload *initrequest.InitRequest) {
 		logrus.Errorf("Failed to convert age to int, %v", err)
 	}
 
-	experience, err := getExeperience(payload)
+	experience, err := getExperience(payload)
 	if err != nil {
 		logrus.Errorf("Failed to get experience, %v", err)
 	}
@@ -503,7 +503,7 @@ func (j *Onest) WithdrawJobApplication(payload *cancelrequest.CancelRequest) {
 	}
 }
 
-func getExeperience(payload *initrequest.InitRequest) (int, error) {
+func getExperience(payload *initrequest.InitRequest) (int, error) {
 	for _, tag := range payload.Message.Order.Fulfillments[0].Customer.Person.Tags {
 		if tag.Descriptor.Code == "WORK_EXPERIENCE" {
 			if len(tag.List) == 0 {

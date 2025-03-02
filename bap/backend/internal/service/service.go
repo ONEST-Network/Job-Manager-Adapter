@@ -20,19 +20,19 @@ import (
 )
 
 type OnestService struct {
-    clients *clients.Clients
+    Clients *clients.Clients
 }
 
 func NewOnestService(clients *clients.Clients) *OnestService {
     return &OnestService{
-        clients: clients,
+        Clients: clients,
     }
 }
 
 func (s *OnestService) Search(ctx context.Context, req *searchrequest.SearchRequest) (*searchresponse.SearchResponse, error) {
     // Make API call to BPP search endpoint
     var response searchresponse.SearchResponse
-    err := s.clients.ApiClient.ApiCall(req, "/search", &response, "POST")
+    err := s.Clients.ApiClient.ApiCall(req, "/search", &response, "POST")
     if err != nil {
         return nil, fmt.Errorf("failed to search jobs: %w", err)
     }
@@ -42,7 +42,7 @@ func (s *OnestService) Search(ctx context.Context, req *searchrequest.SearchRequ
 func (s *OnestService) Select(ctx context.Context, req *selectrequest.SelectRequest) (*selectresponse.SelectResponse, error) {
     // Make API call to BPP select endpoint
     var response selectresponse.SelectResponse
-    err := s.clients.ApiClient.ApiCall(req, "/select", &response, "POST")
+    err := s.Clients.ApiClient.ApiCall(req, "/select", &response, "POST")
     if err != nil {
         return nil, fmt.Errorf("failed to select job: %w", err)
     }
@@ -52,7 +52,7 @@ func (s *OnestService) Select(ctx context.Context, req *selectrequest.SelectRequ
 func (s *OnestService) Init(ctx context.Context, req *initrequest.InitRequest) (*initresponse.InitResponse, error) {
     // Make API call to BPP init endpoint
     var response initresponse.InitResponse
-    err := s.clients.ApiClient.ApiCall(req, "/init", &response, "POST")
+    err := s.Clients.ApiClient.ApiCall(req, "/init", &response, "POST")
     if err != nil {
         return nil, fmt.Errorf("failed to initialize job application: %w", err)
     }
@@ -62,7 +62,7 @@ func (s *OnestService) Init(ctx context.Context, req *initrequest.InitRequest) (
 func (s *OnestService) Confirm(ctx context.Context, req *confirmrequest.ConfirmRequest) (*confirmresponse.ConfirmResponse, error) {
     // Make API call to BPP confirm endpoint
     var response confirmresponse.ConfirmResponse
-    err := s.clients.ApiClient.ApiCall(req, "/confirm", &response, "POST")
+    err := s.Clients.ApiClient.ApiCall(req, "/confirm", &response, "POST")
     if err != nil {
         return nil, fmt.Errorf("failed to confirm job application: %w", err)
     }
@@ -72,7 +72,7 @@ func (s *OnestService) Confirm(ctx context.Context, req *confirmrequest.ConfirmR
 func (s *OnestService) Status(ctx context.Context, req *statusrequest.StatusRequest) (*statusresponse.StatusResponse, error) {
     // Make API call to BPP status endpoint
     var response statusresponse.StatusResponse
-    err := s.clients.ApiClient.ApiCall(req, "/status", &response, "POST")
+    err := s.Clients.ApiClient.ApiCall(req, "/status", &response, "POST")
     if err != nil {
         return nil, fmt.Errorf("failed to get job application status: %w", err)
     }
@@ -82,7 +82,7 @@ func (s *OnestService) Status(ctx context.Context, req *statusrequest.StatusRequ
 func (s *OnestService) Cancel(ctx context.Context, req *cancelrequest.CancelRequest) (*cancelresponse.CancelResponse, error) {
     // Make API call to BPP cancel endpoint
     var response cancelresponse.CancelResponse
-    err := s.clients.ApiClient.ApiCall(req, "/cancel", &response, "POST")
+    err := s.Clients.ApiClient.ApiCall(req, "/cancel", &response, "POST")
     if err != nil {
         return nil, fmt.Errorf("failed to cancel job application: %w", err)
     }

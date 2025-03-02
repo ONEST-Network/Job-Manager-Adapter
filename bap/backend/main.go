@@ -45,5 +45,3 @@ func main() {
 		logrus.Fatal(err)
 	}
 }
-
-// Write an api in bap/backend/main.go to call this /recommend_jobs with required params

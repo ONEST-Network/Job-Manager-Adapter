@@ -44,7 +44,7 @@ func (h *JobRecommendationHandler) GetJobRecommendations(c *gin.Context) {
     }
 
     // Validate request
-    if req.Name == "" || req.Age == 0 || req.Gender == "" || req.PreferredLanguage == "" || 
+    if req.Name == "" || req.Age == 0 || req.Gender == "" || req.PreferredLanguages == nil || 
        len(req.PreferredJobRoles) == 0 {
         c.JSON(http.StatusBadRequest, gin.H{"error": "Missing required fields"})
         return

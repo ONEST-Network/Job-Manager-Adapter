@@ -1,5 +1,18 @@
 package request
 
+type SeekerSearchPayload struct {
+	WorkerID string `json:"worker_id,omitempty"`
+    Role string `json:"role,omitempty"`
+    Provider string `json:"provider,omitempty"`
+    Location SeekerLocation `json:"location,omitempty"`
+}
+
+type SeekerLocation struct {
+	City    string    `json:"city"`
+	State string `json:"state"`
+	Country string `json:"country"`
+}
+
 type SearchRequest struct {
 	Context Context `json:"context"`
 	Message Message `json:"message"`

@@ -136,3 +136,32 @@ func GetCityCode(city string) (string, error) {
 
 	return "", fmt.Errorf("city code not found for %s", city)
 }
+
+func GetCountryCode(country string) (string, error) {
+	countryCodes := map[string]string{
+		"India":          "IND",
+	}
+
+	// Normalize input country name to handle case sensitivity and trim spaces
+	if code, exists := countryCodes[strings.TrimSpace(country)]; exists {
+		return code, nil
+	}
+
+	return "", fmt.Errorf("country code not found for %s", country)
+}
+
+func GetLanguageCode(language string) (string, error) {
+	languageCodes := map[string]string{
+		"English":          "en",
+		"Hindi":            "hi",
+		"Kannada":          "kn",
+	}
+
+	// Normalize input language name to handle case sensitivity and trim spaces
+	if code, exists := languageCodes[strings.TrimSpace(language)]; exists {
+		return code, nil
+	}
+
+	return "", fmt.Errorf("language code not found for %s", language)
+}
+

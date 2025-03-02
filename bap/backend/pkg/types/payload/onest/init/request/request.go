@@ -1,5 +1,20 @@
 package request
 
+type SeekerInitPayload struct {
+	WorkerID string              `json:"worker_id,omitempty"`
+	ProviderID string            `json:"provider_id,omitempty"`
+	JobID    string              `json:"job_id,omitempty"`
+	BppID   string              `json:"bpp_id,omitempty"`
+	BppURI  string              `json:"bpp_uri,omitempty"`
+	Location SelectedJobLocation `json:"location,omitempty"`
+}
+
+type SelectedJobLocation struct {
+	City    string `json:"city"`
+	State   string `json:"state"`
+	Country string `json:"country"`
+}
+
 type InitRequest struct {
 	Context Context `json:"context"`
 	Message Message `json:"message"`

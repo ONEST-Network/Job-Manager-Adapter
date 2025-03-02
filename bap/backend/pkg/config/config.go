@@ -11,6 +11,8 @@ type Configuration struct {
 	DbPassword     string   `required:"true" split_words:"true"`
 	BppId          string   `required:"true" split_words:"true"`
 	BppUri         string   `required:"true" split_words:"true"`
+	BapId          string   `required:"true" split_words:"true"`
+	BapUri         string   `required:"true" split_words:"true"`
 	RecommendationServiceURL string `required:"true" split_words:"true"`
 }
 

@@ -72,7 +72,7 @@ func BuildSearchJobsResponse(clients *clients.Clients, payload *request.SearchRe
 
 		businessCityCode, err := utils.GetCityCode(business.Location.City)
 		if err != nil {
-			return nil, fmt.Errorf("failed to get business city code for %s, %v", business.Location.State, err)
+			return nil, fmt.Errorf("failed to get business city code for %s, %v", business.Location.City, err)
 		}
 
 		jobStateCode, err := utils.GetStateCode(job.Location.State)

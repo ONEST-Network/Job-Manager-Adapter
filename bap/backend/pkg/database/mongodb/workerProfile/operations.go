@@ -2,6 +2,8 @@ package workerProfile
 
 import (
 	"context"
+	"fmt"
+	"strings"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -43,7 +45,10 @@ func (d *Dao) GetWorkerProfile(id string) (*WorkerProfile, error) {
 func (d *Dao) CreateWorkerProfile(worker *WorkerProfile) error {
     ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
     defer cancel()
-
+    // adds the credential short and long description from credentials name
+    if err := parseWorkProfileCredentials(worker); err != nil {
+        return err
+    }
     _, err := d.collection.InsertOne(ctx, worker)
     return err
 }
@@ -80,4 +85,34 @@ func (d *Dao) UpdateWorkerProfile(query, update bson.D) error {
 
     _, err := d.collection.UpdateOne(ctx, query, update)
     return err
+}
+
+func parseWorkProfileCredentials(worker *WorkerProfile) error {
+    for i, cred := range worker.Credentials {
+        credential, err := GetWorkProfileCredentialShortandLongDesc(cred.Name)
+        if err != nil {
+            return err
+        }
+        worker.Credentials[i].ShortDesc = credential["short_desc"]
+        worker.Credentials[i].LongDesc = credential["long_desc"]
+    }
+    return nil
+}
+
+func GetWorkProfileCredentialShortandLongDesc(credName string) (map[string]string, error) {
+	credentialDetails := map[string]map[string]string{
+		"AADHAAR_CARD":  {"short_desc": "Aadhaar Card information", "long_desc": "Unique Identification Number"},
+		"DRIVING_LICENSE":  {"short_desc": "Driving License information", "long_desc": "License to Drive"},
+		"RESUME":  {"short_desc": "Summary of qualifications, work experience, and education.", "long_desc": "A comprehensive document showcasing an individual's career achievements, skills, work history, education, certifications, and professional experience."},
+		"PASSPORT":  {"short_desc": "Passport information", "long_desc": "International Travel Document"},
+		"VOTER_ID":  {"short_desc": "Voter ID information", "long_desc": "Election Commission ID"},
+		"PAN_CARD":  {"short_desc": "PAN Card information", "long_desc": "Permanent Account Number"},
+	}
+
+	// Normalize input credential name to handle case sensitivity and trim spaces
+	if credentialDetail, exists := credentialDetails[strings.TrimSpace(credName)]; exists {
+		return credentialDetail, nil
+	}
+
+	return nil, fmt.Errorf("credential details not found for %s", credName)
 }
