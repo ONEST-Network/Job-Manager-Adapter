@@ -66,6 +66,27 @@ func BuildBPPSearchJobsRequest(payload searchrequest.SeekerSearchPayload) (*sear
 						},
 					},
 				},
+				Tags: []searchrequest.Tags{
+					{
+						Descriptor: searchrequest.TagsDescriptor{
+							Code: "JOB_DETAILS",
+						},
+						List: []searchrequest.List{
+							{
+								Descriptor: searchrequest.TagsDescriptor{
+									Code: "INDUSTRY_TYPE",
+								},
+								Value: payload.Category,
+							},
+							{
+								Descriptor: searchrequest.TagsDescriptor{
+									Code: "JOB_TYPE",
+								},
+								Value: payload.EmploymentType,
+							},
+						},
+					},
+				},
 			},
 		},
 	}
