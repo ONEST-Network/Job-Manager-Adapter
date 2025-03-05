@@ -10,7 +10,6 @@ import (
 	"github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/database/mongodb/job"
 	"github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/onest/search/request"
 	"github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/types/payload/onest/search/response"
-	"github.com/ONEST-Network/Whatsapp-Chatbot/bpp/backend/pkg/utils"
 )
 
 func BuildSearchJobsResponse(clients *clients.Clients, payload *request.SearchRequest, jobs []job.Job) (*response.SearchResponse, error) {
@@ -65,26 +64,6 @@ func BuildSearchJobsResponse(clients *clients.Clients, payload *request.SearchRe
 	for i, job := range jobs {
 		business := job.Business
 
-		businessStateCode, err := utils.GetStateCode(business.Location.State)
-		if err != nil {
-			return nil, fmt.Errorf("failed to get business state code for %s, %v", business.Location.State, err)
-		}
-
-		businessCityCode, err := utils.GetCityCode(business.Location.City)
-		if err != nil {
-			return nil, fmt.Errorf("failed to get business city code for %s, %v", business.Location.City, err)
-		}
-
-		jobStateCode, err := utils.GetStateCode(job.Location.State)
-		if err != nil {
-			return nil, fmt.Errorf("failed to get job state code for %s, %v", job.Location.State, err)
-		}
-
-		jobCityCode, err := utils.GetCityCode(job.Location.City)
-		if err != nil {
-			return nil, fmt.Errorf("failed to get job city code for %s, %v", job.Location.State, err)
-		}
-
 		if job.Location.Coordinates.Coordinates == nil {
 			return nil, fmt.Errorf("job location coordinates are missing for job %s", job.ID)
 		}
@@ -95,11 +74,11 @@ func BuildSearchJobsResponse(clients *clients.Clients, payload *request.SearchRe
 			Street:  job.Location.Street,
 			City: response.City{
 				Name: job.Location.City,
-				Code: jobCityCode,
+				Code: job.Location.City,
 			},
 			State: response.State{
 				Name: job.Location.State,
-				Code: jobStateCode,
+				Code: job.Location.State,
 			},
 			GPS: fmt.Sprintf("%f,%f", job.Location.Coordinates.Coordinates[1], job.Location.Coordinates.Coordinates[0]),
 		})
@@ -127,11 +106,11 @@ func BuildSearchJobsResponse(clients *clients.Clients, payload *request.SearchRe
 				Address: business.Location.Address,
 				State: response.State{
 					Name: business.Location.State,
-					Code: businessStateCode,
+					Code: business.Location.State,
 				},
 				City: response.City{
 					Name: business.Location.City,
-					Code: businessCityCode,
+					Code: business.Location.City,
 				},
 				Contact: response.Contact{
 					Email: business.Email,
