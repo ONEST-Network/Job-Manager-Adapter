@@ -49,6 +49,7 @@ func main() {
     // defer jobSync.Stop()
 
 	// start the server
+	fmt.Println("Starting server at port", config.Config.HTTPPort)
 	if err := server.Run(fmt.Sprintf(":%s", config.Config.HTTPPort)); err != nil {
 		logrus.Fatal(err)
 	}

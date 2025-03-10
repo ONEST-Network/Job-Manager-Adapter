@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -177,6 +178,7 @@ func (h *OnestBPPHandler) Search() gin.HandlerFunc {
                 c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
                 return
             }
+            fmt.Printf("Parsed Seeker Search Request: %+v\n", parsedRequest)
             response, err := h.onestService.Search(c.Request.Context(), parsedRequest)
             if err != nil {
                 c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

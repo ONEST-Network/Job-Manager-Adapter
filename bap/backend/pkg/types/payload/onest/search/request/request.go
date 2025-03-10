@@ -1,20 +1,21 @@
 package request
 
 type SeekerSearchPayload struct {
-	WorkerID string `json:"worker_id,omitempty"`
-    Role string `json:"role,omitempty"`
-    Provider string `json:"provider,omitempty"`
-    Location SeekerLocation `json:"location,omitempty"`
-	EmploymentType string `json:"employment_type,omitempty"`
-	Category string `json:"category,omitempty"`
-	Cache bool `json:"cache,omitempty"`
-	LLM bool `json:"llm,omitempty"`
+	WorkerID       string         `json:"worker_id,omitempty"`
+	Role           string         `json:"role,omitempty"`
+	Provider       string         `json:"provider,omitempty"`
+	Location       SeekerLocation `json:"location,omitempty"`
+	EmploymentType string         `json:"employment_type,omitempty"`
+	Category       string         `json:"category,omitempty"`
+	Cache          bool           `json:"cache,omitempty"`
+	LLM            bool           `json:"llm,omitempty"`
 }
 
 type SeekerLocation struct {
-	City    string    `json:"city"`
-	State string `json:"state"`
+	City    string `json:"city"`
+	State   string `json:"state"`
 	Country string `json:"country"`
+	Coordinates Coordinates `json:"coordinates"`
 }
 
 type SearchRequest struct {
@@ -114,7 +115,7 @@ type ProviderAddress struct {
 }
 type Coordinates struct {
 	Latitude  float64 `bson:"latitude" json:"latitude"`
-	Longitute float64 `bson:"longitude" json:"longitude"`
+	Longitude float64 `bson:"longitude" json:"longitude"`
 }
 type ProviderLocations struct {
 	City        ProviderCity       `json:"city"`

@@ -12,7 +12,7 @@ import (
 
 // Enum collection names
 const (
-	WorkerProfileCollection = "workerProfile"
+	WorkerProfileCollection = "worker-profile"
 	JobCollection                = "job"
 )
 

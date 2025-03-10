@@ -71,7 +71,7 @@ func BuildBPPInitJobRequest(payload initrequest.SeekerInitPayload, transactionId
 										List: []initrequest.List{
 											{
 												Code: "TOTAL_EXPERIENCE",
-												Value: strconv.Itoa(worker.Experience),
+												Value: "P" + strconv.Itoa(worker.Experience) + "Y",
 											},
 										},
 									},

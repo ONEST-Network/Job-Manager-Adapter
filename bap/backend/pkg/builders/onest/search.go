@@ -16,7 +16,7 @@ func BuildBPPSearchJobsRequest(payload searchrequest.SeekerSearchPayload) (*sear
 	if err != nil {
 		return nil, fmt.Errorf("failed to get seeker city code for %s, %v", payload.Location.City, err)
 	}
-	stateCode, err := utils.GetCityCode(payload.Location.State)
+	stateCode, err := utils.GetStateCode(payload.Location.State)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get seeker city code for %s, %v", payload.Location.City, err)
 	}
@@ -62,6 +62,10 @@ func BuildBPPSearchJobsRequest(payload searchrequest.SeekerSearchPayload) (*sear
 							},
 							State: searchrequest.ProviderState {
 								Code: stateCode,
+							},
+							Coordinates: searchrequest.Coordinates{
+								Latitude:  payload.Location.Coordinates.Latitude,
+								Longitude: payload.Location.Coordinates.Longitude,
 							},
 						},
 					},

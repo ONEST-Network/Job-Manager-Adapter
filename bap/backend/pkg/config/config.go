@@ -5,7 +5,7 @@ type Configuration struct {
 	HttpProxy      string   `split_words:"true"`
 	HttpsProxy     string   `split_words:"true"`
 	NoProxy        string   `split_words:"true"`
-	HTTPPort       string   `envconfig:"HTTP_PORT" default:"5000"`
+	HTTPPort       string   `envconfig:"HTTP_PORT" default:"9090"`
 	DbServer       string   `required:"true" split_words:"true"`
 	DbUser         string   `required:"true" split_words:"true"`
 	DbPassword     string   `required:"true" split_words:"true"`
@@ -13,7 +13,7 @@ type Configuration struct {
 	BppUri         string   `required:"true" split_words:"true"`
 	BapId          string   `required:"true" split_words:"true"`
 	BapUri         string   `required:"true" split_words:"true"`
-	RecommendationServiceURL string `required:"true" split_words:"true"`
+	RecommendationServiceURL string `required:"false" split_words:"true"`
 }
 
 var Config Configuration

@@ -100,7 +100,7 @@ func (o *Onest) SearchJobsAck(body io.ReadCloser) (*searchresponse.SearchRespons
 
 func (o *Onest) SearchJobs(payload *searchresponse.SearchResponse) {
     var jobs []job.Job
-    
+    logrus.Infof("========== Job Search Results ==========%+v", payload)
     // Extract jobs from each provider in the catalog
     for _, provider := range payload.Message.Catalog.Providers {
         for _, item := range provider.Items {

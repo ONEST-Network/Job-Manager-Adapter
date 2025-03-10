@@ -29,6 +29,10 @@ func SetupServer(clients *clients.Clients, bppHandler *handlers.OnestBPPHandler)
 	baseRouter := server.Group("/")
 	routes.BaseRouter(baseRouter, clients)
 	routes.BecknRouter(baseRouter, clients)
+
+	workerProfileRouter := server.Group("/worker")
+	routes.WorkerProfileRouter(workerProfileRouter, clients)
+	
 	routes.BPPOnestRoutes(baseRouter, bppHandler)
 	routes.JobRecommendationRouter(baseRouter, clients)
 	
@@ -45,7 +49,7 @@ func InitMongoDB() (*dbWorker.Dao, *dbJob.Dao) {
 	}
 
 	logrus.Info("[Server]: Connected To MongoDB")
-
+	logrus.Info("[Server]: Initializing DAOs: ", mongodb.Client.Database.Name(), mongodb.Client.WorkerProfileCollection.Name(), mongodb.Client.JobCollection.Name())
 	worker := dbWorker.NewWorkerDao(mongodb.Client.WorkerProfileCollection)
 	job := dbJob.NewJobDao(mongodb.Client.JobCollection)
 

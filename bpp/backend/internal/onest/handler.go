@@ -107,7 +107,7 @@ func (j *Onest) SendJobs(payload *searchrequest.SearchRequest) {
 		logrus.Errorf("Failed to list jobs, %v", err)
 		return
 	}
-
+	logrus.Info("Jobs found: ", jobs)
 	response, err := onest.BuildSearchJobsResponse(j.clients, payload, jobs)
 	if err != nil {
 		logrus.Errorf("Failed to build list jobs, %v", err)
@@ -614,7 +614,8 @@ func getSearchFilter(payload *searchrequest.SearchRequest) bson.D {
 		tags      = payload.Message.Intent.Item.Tags
 		query     = bson.D{}
 	)
-
+	logrus.Info("got role: ", role)
+	logrus.Infof("got location: %+v", locations)
 	if role != "" {
 		query = append(query, bson.E{
 			Key: "$or", Value: bson.A{
@@ -649,7 +650,7 @@ func getSearchFilter(payload *searchrequest.SearchRequest) bson.D {
 		}
 		if location.Coordinates.Longitute != 0 && location.Coordinates.Latitude != 0 {
 			query = append(query, bson.E{
-				Key: "address.coordinates", Value: bson.D{
+				Key: "location.coordinates", Value: bson.D{
 					{Key: "$nearSphere", Value: bson.D{
 						{Key: "$geometry", Value: bson.D{
 							{Key: "type", Value: "Point"},
