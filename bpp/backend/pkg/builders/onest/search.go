@@ -73,12 +73,13 @@ func BuildSearchJobsResponse(clients *clients.Clients, payload *request.SearchRe
 			Address: job.Location.Address,
 			Street:  job.Location.Street,
 			City: response.City{
-				Name: job.Location.City,
 				Code: job.Location.City,
 			},
 			State: response.State{
-				Name: job.Location.State,
 				Code: job.Location.State,
+			},
+			AreaCode: response.AreaCode{
+				Code: job.Location.AreaCode,
 			},
 			GPS: fmt.Sprintf("%f,%f", job.Location.Coordinates.Coordinates[1], job.Location.Coordinates.Coordinates[0]),
 		})
@@ -105,11 +106,9 @@ func BuildSearchJobsResponse(clients *clients.Clients, payload *request.SearchRe
 				},
 				Address: business.Location.Address,
 				State: response.State{
-					Name: business.Location.State,
 					Code: business.Location.State,
 				},
 				City: response.City{
-					Name: business.Location.City,
 					Code: business.Location.City,
 				},
 				Contact: response.Contact{
