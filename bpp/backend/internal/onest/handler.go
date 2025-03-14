@@ -366,6 +366,16 @@ func (j *Onest) ConfirmJobApplication(payload *confirmrequest.ConfirmRequest, in
 		return
 	}
 
+	var (
+		query  = bson.D{{Key: "id", Value: payload.Message.Order.Items[0].ID}}
+		update = bson.D{{Key: "$inc", Value: bson.D{{Key: "vacancies", Value: -1}}}}
+	)
+
+	if err := j.clients.JobClient.UpdateJob(query, update); err != nil {
+		logrus.Errorf("Failed to update %s job vacancies, %v", payload.Message.Order.Items[0].ID, err)
+		return
+	}
+
 	response := onest.BuildConfirmJobApplicationResponse(payload)
 
 	var initResponseAck confirmresponseack.ConfirmResponseAck
@@ -486,6 +496,14 @@ func (j *Onest) WithdrawJobApplication(payload *cancelrequest.CancelRequest) {
 	jobApplication, err := j.clients.JobApplicationClient.UpdateJobApplicationAndReturnDocument(query, update)
 	if err != nil {
 		logrus.Errorf("Failed to update %s job application as withdrawn, %v", payload.Message.OrderID, err)
+		return
+	}
+
+	query = bson.D{{Key: "id", Value: jobApplication.JobID}}
+	update = bson.D{{Key: "$inc", Value: bson.D{{Key: "vacancies", Value: 1}}}}
+
+	if err := j.clients.JobClient.UpdateJob(query, update); err != nil {
+		logrus.Errorf("Failed to update %s job vacancies, %v", jobApplication.JobID, err)
 		return
 	}
 
