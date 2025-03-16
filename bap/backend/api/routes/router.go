@@ -15,7 +15,6 @@ func BecknRouter(router *gin.RouterGroup, clients *clients.Clients) {
 	router.POST("/on_cancel", handlers.WithdrawJobApplication(clients))
 }
 
-
 func BPPOnestRoutes(router *gin.RouterGroup, handler *handlers.OnestBPPHandler) {
     router.POST("/search", handler.Search())
     router.POST("/select", handler.Select())

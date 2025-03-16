@@ -4,6 +4,7 @@ import (
 	apiclient "github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/pkg/api-client"
 	dbJob "github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/pkg/database/mongodb/job"
 	dbWorker "github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/pkg/database/mongodb/workerProfile"
+	dbSearchResponse "github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/pkg/database/mongodb/searchResponse"
 	dbInitJobApplication "github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/pkg/database/mongodb/init-job-application"
 	"github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/internal/job-recommender"
 )
@@ -11,12 +12,13 @@ import (
 type Clients struct {
 	ApiClient           apiclient.Interface
 	WorkerProfileClient *dbWorker.Dao
+	SearchReponseClient *dbSearchResponse.Dao
 	JobClient           *dbJob.Dao
 	InitJobApplicationClient *dbInitJobApplication.Dao
 	RecommendationClient *jobrecommender.JobRecommendationClient
 }
 
-func NewClients(jobClient *dbJob.Dao, workerProfileClient *dbWorker.Dao) *Clients {
+func NewClients(jobClient *dbJob.Dao, workerProfileClient *dbWorker.Dao, searchReponseClient *dbSearchResponse.Dao) *Clients {
 	return &Clients{
 		ApiClient:           apiclient.NewAPIClient(),
 		WorkerProfileClient: workerProfileClient,

@@ -1,12 +1,15 @@
 package handlers
 
 import (
-	"fmt"
+	"context"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 
 	"github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/internal/onest"
 	"github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/internal/service"
@@ -18,6 +21,7 @@ import (
 	searchrequest "github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/pkg/types/payload/onest/search/request"
 	selectrequest "github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/pkg/types/payload/onest/select/request"
 	statusrequest "github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/pkg/types/payload/onest/status/request"
+    dbSearchResponse "github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/pkg/database/mongodb/searchResponse"
 )
 
 type OnestBPPHandler struct {
@@ -43,7 +47,7 @@ func SearchJobs(clients *clients.Clients) gin.HandlerFunc {
 			return
 		}
 
-		c.JSON(statusCode, ack)
+		// c.JSON(statusCode, ack)
 
 		go onest.SearchJobs(payload)
 	}
@@ -162,11 +166,33 @@ func (h *OnestBPPHandler) Search() gin.HandlerFunc {
 		}
         // Store transaction ID and message ID in worker profile
         if payload.WorkerID != "" {
-            parsedRequest, err := builders.BuildBPPSearchJobsRequest(payload)
+            // Get MongoDB collection where responses are stored
+            responseCollection := h.onestService.Clients.SearchReponseClient.Collection
+            // Create a context with timeout to prevent indefinite blocking
+            ctx, cancel := context.WithTimeout(c.Request.Context(), 30*time.Second)
+            defer cancel()
+
+            parsedRequest, transaction_id, err := builders.BuildBPPSearchJobsRequest(payload)
             if err != nil {
                 logrus.Errorf("Failed to parse search job request, %v", err)
                 return
             }
+            // Create a new document in the SearchResponseClient collection
+            searchJobResponse := dbSearchResponse.SearchJobResponse {
+                ID: transaction_id,
+                TransactionID: transaction_id,
+            }
+
+            // Insert the document into the collection
+            err = h.onestService.Clients.SearchReponseClient.CreateSearchJobResponse(&searchJobResponse)
+            if err != nil {
+                logrus.Errorf("Failed to create search response document: %v", err)
+                c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create search response"})
+                return
+            }
+
+            logrus.Infof("Created search response document with transaction_id: %s", transaction_id)
+
             updateQuery := bson.D{{Key: "id", Value: payload.WorkerID}}
             updateFields := bson.D{{Key: "$set", Value: bson.D{
                 {Key: "transaction_id", Value: parsedRequest.Context.TransactionID},
@@ -178,14 +204,67 @@ func (h *OnestBPPHandler) Search() gin.HandlerFunc {
                 c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
                 return
             }
-            fmt.Printf("Parsed Seeker Search Request: %+v\n", parsedRequest)
-            response, err := h.onestService.Search(c.Request.Context(), parsedRequest)
+            logrus.Printf("Parsed Seeker Search Request: %+v\n", parsedRequest)
+            _, err = h.onestService.Search(c.Request.Context(), parsedRequest)
             if err != nil {
                 c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
                 return
             }
+            
 
-            c.JSON(http.StatusOK, response)
+            // Create a pipeline to match only documents with our transaction_id
+            pipeline := mongo.Pipeline{
+                bson.D{{Key: "$match", Value: bson.D{
+                    {Key: "fullDocument.transaction_id", Value: transaction_id},
+                    {Key: "updateDescription.updatedFields.jobs_response", Value: bson.D{{Key: "$exists", Value: true}}},
+                }}},
+            }
+
+            // Set up the change stream options
+            opts := options.ChangeStream().SetFullDocument(options.UpdateLookup)
+            
+            // Create the change stream
+            changeStream, err := responseCollection.Watch(ctx, pipeline, opts)
+            if err != nil {
+                logrus.Errorf("Failed to create change stream: %v", err)
+                c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to watch for response"})
+                return
+            }
+            defer changeStream.Close(ctx)
+            
+            // Wait for a matching document
+            logrus.Infof("Waiting for response for transaction ID: %s", parsedRequest.Context.TransactionID)
+
+            var result bson.M
+            if changeStream.Next(ctx) {
+                if err := changeStream.Decode(&result); err != nil {
+                    logrus.Errorf("Error decoding change stream document: %v", err)
+                    c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to process response"})
+                    return
+                }
+                
+                // Extract the full document from the change stream result
+                if fullDoc, ok := result["fullDocument"].(bson.M); ok {
+                    // Return the jobs_response field to the client
+                    if jobsResponse, ok := fullDoc["jobs_response"]; ok {
+                        c.JSON(http.StatusOK, jobsResponse)
+                    } else {
+                        c.JSON(http.StatusOK, fullDoc) // Fallback to returning the entire document
+                    }
+                    return
+                } else {
+                    c.JSON(http.StatusInternalServerError, gin.H{"error": "Invalid response format"})
+                    return
+                }
+            }
+            
+            // If context timed out
+            if ctx.Err() != nil {
+                c.JSON(http.StatusGatewayTimeout, gin.H{"error": "Response timeout"})
+                return
+            }
+
+            // c.JSON(http.StatusOK, response)
         } else {
             c.JSON(http.StatusInternalServerError, gin.H{"error": "please provide a valid worker ID"})
             return

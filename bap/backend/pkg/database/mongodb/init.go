@@ -14,6 +14,7 @@ import (
 const (
 	WorkerProfileCollection = "worker-profile"
 	JobCollection                = "job"
+	SearchJobResponse = "search-job-response"
 )
 
 // MongoClient structure contains all the database collections and the instance of the database
@@ -22,6 +23,7 @@ type MongoClient struct {
 	Database                *mongo.Database
 	WorkerProfileCollection *mongo.Collection
 	JobCollection                *mongo.Collection
+	SearchJobResponse *mongo.Collection
 }
 
 var (
@@ -44,6 +46,7 @@ func NewMongoClient() (*MongoClient, error) {
 		Database:                database,
 		WorkerProfileCollection: database.Collection(WorkerProfileCollection),
 		JobCollection:                database.Collection(JobCollection),
+		SearchJobResponse: database.Collection(SearchJobResponse),
 		Client:                  client,
 	}, nil
 }

@@ -3,15 +3,15 @@ package onest
 import (
 	"encoding/json"
 	"io"
-	"regexp"
-	"strconv"
-	"strings"
+	// "regexp"
+	// "strconv"
+	// "strings"
 
 	"github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
 
 	"github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/pkg/clients"
-	"github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/pkg/database/mongodb/business"
+	// "github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/pkg/database/mongodb/business"
 	"github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/pkg/database/mongodb/job"
 
 	searchresponse "github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/pkg/types/payload/onest/search/response"
@@ -101,149 +101,175 @@ func (o *Onest) SearchJobsAck(body io.ReadCloser) (*searchresponse.SearchRespons
 func (o *Onest) SearchJobs(payload *searchresponse.SearchResponse) {
     var jobs []job.Job
     logrus.Infof("========== Job Search Results ==========%+v", payload)
-    // Extract jobs from each provider in the catalog
-    for _, provider := range payload.Message.Catalog.Providers {
-        for _, item := range provider.Items {
-            // Extract work hours
-            workHours := job.WorkHours{
-                Start: "",
-                End:   "",
-            }
-            // Extract work days
-            workDays := job.WorkDays{
-                Start: 0,
-                End:   0,
-            }
-            
-            // Process timing tags
-            for _, tag := range item.Tags {
-                if tag.Descriptor.Code == "TIMING" {
-                    for _, list := range tag.List {
-                        switch list.Descriptor.Code {
-                        case "TIME_FROM":
-                            workHours.Start = list.Value
-                        case "TIME_TO":
-                            workHours.End = list.Value
-                        case "DAY_FROM":
-                            start, _ := strconv.Atoi(list.Value)
-                            workDays.Start = start
-                        case "DAY_TO":
-                            end, _ := strconv.Atoi(list.Value)
-                            workDays.End = end
-                        }
-                    }
-                }
-            }
 
-            // Extract salary range
-            salaryRange := job.SalaryRange{
-                Min: 0,
-                Max: 0,
-            }
-            for _, tag := range item.Tags {
-                if tag.Descriptor.Code == "SALARY_INFO" {
-                    for _, list := range tag.List {
-                        switch list.Descriptor.Code {
-                        case "GROSS_MIN":
-                            min, _ := strconv.Atoi(list.Value)
-                            salaryRange.Min = min
-                        case "GROSS_MAX":
-                            max, _ := strconv.Atoi(list.Value)
-                            salaryRange.Max = max
-                        }
-                    }
-                }
-            }
-
-            // Extract eligibility criteria
-            eligibility := job.Eligibility{
-                AcademicQualification: job.AcademicQualificationNone,
-                YearsOfExperience:    0,
-                DocumentsRequired:     []job.Document{},
-            }
-            
-            for _, tag := range item.Tags {
-                switch tag.Descriptor.Code {
-                case "ACADEMIC_ELIGIBILITY":
-                    for _, list := range tag.List {
-                        if list.Descriptor.Code == "COURSE_Level" {
-                            eligibility.AcademicQualification = job.AcademicQualification(list.Value)
-                        }
-                    }
-                case "JOB_REQUIREMENTS":
-                    for _, list := range tag.List {
-                        if list.Descriptor.Code == "REQ_EXPERIENCE" {
-                            re := regexp.MustCompile(`P(\d+)Y`)
-                            if matches := re.FindStringSubmatch(list.Value); len(matches) > 1 {
-                                years, _ := strconv.Atoi(matches[1])
-                                eligibility.YearsOfExperience = years
-                            }
-                        }
-                    }
-                case "DOCUMENT_NAME":
-                    for _, list := range tag.List {
-                        if list.Descriptor.Code == "DOCUMENT_NAME" {
-                            eligibility.DocumentsRequired = append(eligibility.DocumentsRequired, job.Document(list.Value))
-                        }
-                    }
-                }
-            }
-
-            // Extract location
-            location := job.Location{}
-            for _, loc := range provider.Locations {
-                if contains(item.LocationIds, loc.ID) {
-                    coords := strings.Split(loc.GPS, ",")
-                    if len(coords) == 2 {
-                        lat, _ := strconv.ParseFloat(coords[0], 64)
-                        lng, _ := strconv.ParseFloat(coords[1], 64)
-                        location = job.Location{
-                            Address: loc.Address,
-                            Street:  loc.Street,
-                            City:    loc.City.Name,
-                            State:   loc.State.Name,
-                            Coordinates: job.Coordinates{
-                                Type:        "Point",
-                                Coordinates: []float64{lng, lat},
-                            },
-                        }
-                        break
-                    }
-                }
-            }
-
-            // Create business details
-            business := business.Business{
-                Name:        item.Creator.Descriptor.Name,
-                Description: item.Creator.Descriptor.LongDesc,
-                Location: business.Location{
-                    Address: item.Creator.Address,
-                    City:    item.Creator.City.Name,
-                    State:   item.Creator.State.Name,
-                },
-                Email: item.Creator.Contact.Email,
-                Phone: item.Creator.Contact.Phone,
-            }
-
-            // Create job entry
-            job := job.Job{
-                ID:          item.ID,
-                Name:        item.Descriptor.Name,
-                Description: item.Descriptor.LongDesc,
-                Type:        job.JobType("FULL_TIME"), // Set default or extract from tags if available
-                Vacancies:   item.Quantity.Available.Count,
-                SalaryRange: salaryRange,
-                Business:    business,
-                WorkHours:   workHours,
-                WorkDays:    workDays,
-                Eligibility: eligibility,
-                Location:    location,
-            }
-
-            jobs = append(jobs, job)
-        }
+    // Store the response in the SearchJobResponse collection against the transaction ID
+    transactionID := payload.Context.TransactionID
+    
+    // Check if document already exists with this transaction ID
+    existingResponses, err := o.clients.SearchReponseClient.ListSearchJobResponse(
+        bson.D{{Key: "transaction_id", Value: transactionID}},
+    )
+    
+    if err != nil {
+        logrus.Errorf("Error checking for existing search response: %v", err)
     }
 
+    // Update or create document based on whether it exists
+    if err == nil && len(existingResponses) > 0 {
+       // Update existing document
+       updateQuery := bson.D{{Key: "transaction_id", Value: transactionID}}
+       updateFields := bson.D{{Key: "$set", Value: bson.D{
+           {Key: "jobs_response", Value: []searchresponse.SearchResponse{*payload}},
+       }}}
+       
+       if err := o.clients.SearchReponseClient.UpdateSearchJobResponse(updateQuery, updateFields); err != nil {
+           logrus.Errorf("Failed to update search job response with transaction ID %s: %v", transactionID, err)
+       } else {
+           logrus.Infof("Updated search job response for transaction ID: %s", transactionID)
+       }
+    } else {
+        // Document doesn't exist with this transaction ID
+        errMsg := "No document found with transaction ID: " + transactionID
+        logrus.Errorf(errMsg)
+        return
+    }
+    
+    // Extract jobs from each provider in the catalog
+    // for _, provider := range payload.Message.Catalog.Providers {
+    //     for _, item := range provider.Items {
+    //         // Extract work hours
+    //         workHours := job.WorkHours{
+    //             Start: "",
+    //             End:   "",
+    //         }
+    //         // Extract work days
+    //         workDays := job.WorkDays{
+    //             Start: 0,
+    //             End:   0,
+    //         }        
+    //         // Process timing tags
+    //         for _, tag := range item.Tags {
+    //             if tag.Descriptor.Code == "TIMING" {
+    //                 for _, list := range tag.List {
+    //                     switch list.Descriptor.Code {
+    //                     case "TIME_FROM":
+    //                         workHours.Start = list.Value
+    //                     case "TIME_TO":
+    //                         workHours.End = list.Value
+    //                     case "DAY_FROM":
+    //                         start, _ := strconv.Atoi(list.Value)
+    //                         workDays.Start = start
+    //                     case "DAY_TO":
+    //                         end, _ := strconv.Atoi(list.Value)
+    //                         workDays.End = end
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //         // Extract salary range
+    //         salaryRange := job.SalaryRange{
+    //             Min: 0,
+    //             Max: 0,
+    //         }
+    //         for _, tag := range item.Tags {
+    //             if tag.Descriptor.Code == "SALARY_INFO" {
+    //                 for _, list := range tag.List {
+    //                     switch list.Descriptor.Code {
+    //                     case "GROSS_MIN":
+    //                         min, _ := strconv.Atoi(list.Value)
+    //                         salaryRange.Min = min
+    //                     case "GROSS_MAX":
+    //                         max, _ := strconv.Atoi(list.Value)
+    //                         salaryRange.Max = max
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //         // Extract eligibility criteria
+    //         eligibility := job.Eligibility{
+    //             AcademicQualification: job.AcademicQualificationNone,
+    //             YearsOfExperience:    0,
+    //             DocumentsRequired:     []job.Document{},
+    //         }       
+    //         for _, tag := range item.Tags {
+    //             switch tag.Descriptor.Code {
+    //             case "ACADEMIC_ELIGIBILITY":
+    //                 for _, list := range tag.List {
+    //                     if list.Descriptor.Code == "COURSE_Level" {
+    //                         eligibility.AcademicQualification = job.AcademicQualification(list.Value)
+    //                     }
+    //                 }
+    //             case "JOB_REQUIREMENTS":
+    //                 for _, list := range tag.List {
+    //                     if list.Descriptor.Code == "REQ_EXPERIENCE" {
+    //                         re := regexp.MustCompile(`P(\d+)Y`)
+    //                         if matches := re.FindStringSubmatch(list.Value); len(matches) > 1 {
+    //                             years, _ := strconv.Atoi(matches[1])
+    //                             eligibility.YearsOfExperience = years
+    //                         }
+    //                     }
+    //                 }
+    //             case "DOCUMENT_NAME":
+    //                 for _, list := range tag.List {
+    //                     if list.Descriptor.Code == "DOCUMENT_NAME" {
+    //                         eligibility.DocumentsRequired = append(eligibility.DocumentsRequired, job.Document(list.Value))
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //         // Extract location
+    //         location := job.Location{}
+    //         for _, loc := range provider.Locations {
+    //             if contains(item.LocationIds, loc.ID) {
+    //                 coords := strings.Split(loc.GPS, ",")
+    //                 if len(coords) == 2 {
+    //                     lat, _ := strconv.ParseFloat(coords[0], 64)
+    //                     lng, _ := strconv.ParseFloat(coords[1], 64)
+    //                     location = job.Location{
+    //                         Address: loc.Address,
+    //                         Street:  loc.Street,
+    //                         City:    loc.City.Name,
+    //                         State:   loc.State.Name,
+    //                         Coordinates: job.Coordinates{
+    //                             Type:        "Point",
+    //                             Coordinates: []float64{lng, lat},
+    //                         },
+    //                     }
+    //                     break
+    //                 }
+    //             }
+    //         }
+    //         // Create business details
+    //         business := business.Business{
+    //             Name:        item.Creator.Descriptor.Name,
+    //             Description: item.Creator.Descriptor.LongDesc,
+    //             Location: business.Location{
+    //                 Address: item.Creator.Address,
+    //                 City:    item.Creator.City.Name,
+    //                 State:   item.Creator.State.Name,
+    //             },
+    //             Email: item.Creator.Contact.Email,
+    //             Phone: item.Creator.Contact.Phone,
+    //         }
+    //         // Create job entry
+    //         job := job.Job{
+    //             ID:          item.ID,
+    //             Name:        item.Descriptor.Name,
+    //             Description: item.Descriptor.LongDesc,
+    //             Type:        job.JobType("FULL_TIME"), // Set default or extract from tags if available
+    //             Vacancies:   item.Quantity.Available.Count,
+    //             SalaryRange: salaryRange,
+    //             Business:    business,
+    //             WorkHours:   workHours,
+    //             WorkDays:    workDays,
+    //             Eligibility: eligibility,
+    //             Location:    location,
+    //         }
+    //         jobs = append(jobs, job)
+    //     }
+    // }
+    logrus.Infof("Jobs found: %d", len(jobs))
+    
     // Store jobs in database
     // if err := o.clients.JobClient.CreateJobs(jobs); err != nil {
     //     logrus.Errorf("Failed to store jobs: %v", err)

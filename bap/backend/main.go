@@ -29,10 +29,10 @@ func main() {
 	proxy.SetProxyENVs()
 
 	// Initialize mongodb clients
-	seekerClient, jobClient := server.InitMongoDB()
+	seekerClient, jobClient, searchJobResponse := server.InitMongoDB()
 
 	// Set up clients
-	clients := clients.NewClients(jobClient, seekerClient)
+	clients := clients.NewClients(jobClient, seekerClient, searchJobResponse)
 
 	// Set up the service
 	onestBPPService := service.NewOnestBPPService(clients)

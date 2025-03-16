@@ -12,6 +12,7 @@ import (
 	"github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/pkg/database/mongodb"
 	dbWorker "github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/pkg/database/mongodb/workerProfile"
 	dbJob "github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/pkg/database/mongodb/job"
+	dbSearchResponse "github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/pkg/database/mongodb/searchResponse"
 )
 
 func SetupServer(clients *clients.Clients, bppHandler *handlers.OnestBPPHandler) *gin.Engine {
@@ -39,7 +40,7 @@ func SetupServer(clients *clients.Clients, bppHandler *handlers.OnestBPPHandler)
 	return server
 }
 
-func InitMongoDB() (*dbWorker.Dao, *dbJob.Dao) {
+func InitMongoDB() (*dbWorker.Dao, *dbJob.Dao, *dbSearchResponse.Dao) {
 	var err error
 
 	// Initialize mongodb clients
@@ -52,7 +53,7 @@ func InitMongoDB() (*dbWorker.Dao, *dbJob.Dao) {
 	logrus.Info("[Server]: Initializing DAOs: ", mongodb.Client.Database.Name(), mongodb.Client.WorkerProfileCollection.Name(), mongodb.Client.JobCollection.Name())
 	worker := dbWorker.NewWorkerDao(mongodb.Client.WorkerProfileCollection)
 	job := dbJob.NewJobDao(mongodb.Client.JobCollection)
+	searchJobResponse := dbSearchResponse.NewSearchJobResponseDao(mongodb.Client.SearchJobResponse)
 
-
-	return worker, job
+	return worker, job, searchJobResponse
 }

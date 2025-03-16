@@ -11,25 +11,26 @@ import (
 	"github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/pkg/utils"
 )
 
-func BuildBPPSearchJobsRequest(payload searchrequest.SeekerSearchPayload) (*searchrequest.SearchRequest, error) {
+func BuildBPPSearchJobsRequest(payload searchrequest.SeekerSearchPayload) (*searchrequest.SearchRequest, string, error) {
 	cityCode, err := utils.GetCityCode(payload.Location.City)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get seeker city code for %s, %v", payload.Location.City, err)
+		return nil, "", fmt.Errorf("failed to get seeker city code for %s, %v", payload.Location.City, err)
 	}
 	stateCode, err := utils.GetStateCode(payload.Location.State)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get seeker city code for %s, %v", payload.Location.City, err)
+		return nil, "", fmt.Errorf("failed to get seeker city code for %s, %v", payload.Location.City, err)
 	}
 	countryCode, err := utils.GetCountryCode(payload.Location.Country)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get seeker country code for %s, %v", payload.Location.Country, err)
+		return nil, "", fmt.Errorf("failed to get seeker country code for %s, %v", payload.Location.Country, err)
 	}
+	transaction_id := uuid.New().String()
 	req := searchrequest.SearchRequest{
 		Context: searchrequest.Context{
 			Domain:        "ONDC:ONEST10",
 			Action:        "search",
 			Version:       "2.0.0",
-			TransactionID: uuid.New().String(),
+			TransactionID: transaction_id,
             MessageID:     uuid.New().String(),
 			BapID:         config.Config.BapId,
 			BapURI:        config.Config.BapUri,
@@ -94,5 +95,5 @@ func BuildBPPSearchJobsRequest(payload searchrequest.SeekerSearchPayload) (*sear
 			},
 		},
 	}
-	return &req, nil
+	return &req, transaction_id, nil
 }
