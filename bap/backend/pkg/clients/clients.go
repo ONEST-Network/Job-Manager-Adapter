@@ -24,5 +24,6 @@ func NewClients(jobClient *dbJob.Dao, workerProfileClient *dbWorker.Dao, searchR
 		WorkerProfileClient: workerProfileClient,
 		JobClient:                jobClient,
 		RecommendationClient: jobrecommender.NewJobRecommendationClient(),
+		SearchReponseClient: searchReponseClient,
 	}
 }

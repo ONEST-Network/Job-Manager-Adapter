@@ -89,12 +89,12 @@ func getSearchFilter(payload *workerProfile.WorkerProfile) bson.D {
 		if location.State != "" {
 			query = append(query, bson.E{Key: "location.state", Value: location.State})
 		}
-		if location.PostalCode != "" {
-			query = append(query, bson.E{Key: "location.postal_code", Value: location.PostalCode})
+		if location.AreaCode != "" {
+			query = append(query, bson.E{Key: "location.area_code", Value: location.AreaCode})
 			query = append(query, bson.E{Key: "$or", Value: bson.A{bson.D{{
 				Key: "location.address",
 				Value: bson.D{
-					{Key: "$regex", Value: location.PostalCode},
+					{Key: "$regex", Value: location.AreaCode},
 					{Key: "$options", Value: "i"},
 				},
 			}}}})

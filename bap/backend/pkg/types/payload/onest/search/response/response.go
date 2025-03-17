@@ -53,12 +53,15 @@ type State struct {
 	Name string `json:"name"`
 	Code string `json:"code"`
 }
+type AreaCode struct {
+	Code string `json:"code"`
+}
 type Locations struct {
 	ID         string `json:"id"`
 	GPS        string `json:"gps"`
 	Address    string `json:"address"`
 	Street     string `json:"street"`
-	PostalCode string `json:"postalCode"`
+	AreaCode AreaCode `json:"areaCode"`
 	City       City   `json:"city"`
 	State      State  `json:"state"`
 }

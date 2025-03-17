@@ -47,7 +47,7 @@ func SearchJobs(clients *clients.Clients) gin.HandlerFunc {
 			return
 		}
 
-		// c.JSON(statusCode, ack)
+		c.JSON(statusCode, ack)
 
 		go onest.SearchJobs(payload)
 	}
@@ -167,6 +167,7 @@ func (h *OnestBPPHandler) Search() gin.HandlerFunc {
         // Store transaction ID and message ID in worker profile
         if payload.WorkerID != "" {
             // Get MongoDB collection where responses are stored
+            logrus.Infof("search response client: %+v", h.onestService.Clients.SearchReponseClient)
             responseCollection := h.onestService.Clients.SearchReponseClient.Collection
             // Create a context with timeout to prevent indefinite blocking
             ctx, cancel := context.WithTimeout(c.Request.Context(), 30*time.Second)

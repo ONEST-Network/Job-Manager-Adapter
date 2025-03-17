@@ -50,7 +50,7 @@ func InitMongoDB() (*dbWorker.Dao, *dbJob.Dao, *dbSearchResponse.Dao) {
 	}
 
 	logrus.Info("[Server]: Connected To MongoDB")
-	logrus.Info("[Server]: Initializing DAOs: ", mongodb.Client.Database.Name(), mongodb.Client.WorkerProfileCollection.Name(), mongodb.Client.JobCollection.Name())
+	logrus.Info("[Server]: Initializing DAOs: ", mongodb.Client.Database.Name(), mongodb.Client.WorkerProfileCollection.Name(), mongodb.Client.JobCollection.Name(), mongodb.Client.SearchJobResponse.Name())
 	worker := dbWorker.NewWorkerDao(mongodb.Client.WorkerProfileCollection)
 	job := dbJob.NewJobDao(mongodb.Client.JobCollection)
 	searchJobResponse := dbSearchResponse.NewSearchJobResponseDao(mongodb.Client.SearchJobResponse)

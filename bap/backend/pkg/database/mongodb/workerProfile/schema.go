@@ -31,7 +31,7 @@ type Credential struct {
 // Location represents the location of a job
 type Location struct {
 	Coordinates Coordinates `bson:"coordinates" json:"coordinates"`
-	PostalCode  string      `bson:"postal_code" json:"postalCode"`
+	AreaCode  string      `bson:"area_code" json:"areaCode"`
 	City        string      `bson:"city" json:"city"`
 	State       string      `bson:"state" json:"state"`
 }
