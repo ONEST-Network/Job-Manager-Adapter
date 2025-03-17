@@ -366,6 +366,16 @@ func (j *Onest) ConfirmJobApplication(payload *confirmrequest.ConfirmRequest, in
 		return
 	}
 
+	var (
+		query  = bson.D{{Key: "id", Value: payload.Message.Order.Items[0].ID}}
+		update = bson.D{{Key: "$inc", Value: bson.D{{Key: "vacancies", Value: -1}}}}
+	)
+
+	if err := j.clients.JobClient.UpdateJob(query, update); err != nil {
+		logrus.Errorf("Failed to update %s job vacancies, %v", payload.Message.Order.Items[0].ID, err)
+		return
+	}
+
 	response := onest.BuildConfirmJobApplicationResponse(payload)
 
 	var initResponseAck confirmresponseack.ConfirmResponseAck
@@ -486,6 +496,14 @@ func (j *Onest) WithdrawJobApplication(payload *cancelrequest.CancelRequest) {
 	jobApplication, err := j.clients.JobApplicationClient.UpdateJobApplicationAndReturnDocument(query, update)
 	if err != nil {
 		logrus.Errorf("Failed to update %s job application as withdrawn, %v", payload.Message.OrderID, err)
+		return
+	}
+
+	query = bson.D{{Key: "id", Value: jobApplication.JobID}}
+	update = bson.D{{Key: "$inc", Value: bson.D{{Key: "vacancies", Value: 1}}}}
+
+	if err := j.clients.JobClient.UpdateJob(query, update); err != nil {
+		logrus.Errorf("Failed to update %s job vacancies, %v", jobApplication.JobID, err)
 		return
 	}
 
@@ -638,12 +656,12 @@ func getSearchFilter(payload *searchrequest.SearchRequest) bson.D {
 		if location.State.Code != "" {
 			query = append(query, bson.E{Key: "location.state", Value: location.State.Code})
 		}
-		if location.PostalCode.Code != "" {
-			query = append(query, bson.E{Key: "location.postal_code", Value: location.PostalCode.Code})
+		if location.AreaCode.Code != "" {
+			query = append(query, bson.E{Key: "location.area_code", Value: location.AreaCode.Code})
 			query = append(query, bson.E{Key: "$or", Value: bson.A{bson.D{{
 				Key: "location.address",
 				Value: bson.D{
-					{Key: "$regex", Value: location.PostalCode.Code},
+					{Key: "$regex", Value: location.AreaCode.Code},
 					{Key: "$options", Value: "i"},
 				},
 			}}}})

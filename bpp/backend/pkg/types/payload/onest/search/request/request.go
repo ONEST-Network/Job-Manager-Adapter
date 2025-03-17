@@ -89,7 +89,7 @@ type ProviderCity struct {
 type ProviderState struct {
 	Code string `json:"code"`
 }
-type ProviderPostalCode struct {
+type ProviderAreaCode struct {
 	Code string `json:"code"`
 }
 type ProviderAddress struct {
@@ -100,8 +100,8 @@ type Coordinates struct {
 	Longitute float64 `bson:"longitude" json:"longitude"`
 }
 type ProviderLocations struct {
-	City        ProviderCity       `json:"city"`
-	State       ProviderState      `json:"state"`
-	PostalCode  ProviderPostalCode `json:"postalCode"`
-	Coordinates Coordinates        `json:"coordinates"`
+	City        ProviderCity     `json:"city"`
+	State       ProviderState    `json:"state"`
+	AreaCode    ProviderAreaCode `json:"areaCode"`
+	Coordinates Coordinates      `json:"coordinates"`
 }
