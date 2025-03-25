@@ -13,14 +13,6 @@ import (
 )
 
 func BuildBPPConfirmJobRequest(payload confirmrequest.SeekerConfirmPayload, transactionId, messageId, bppId, bppuri string, worker *workerProfile.WorkerProfile) (*confirmrequest.ConfirmRequest, error) {
-	cityCode, err := utils.GetCityCode(payload.Location.City)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get seeker city code for %s, %v", payload.Location.City, err)
-	}
-	countryCode, err := utils.GetCountryCode(payload.Location.Country)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get seeker country code for %s, %v", payload.Location.Country, err)
-	}
 	languages, err := getConfirmLanguages(worker)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get seeker languages: %v", err)
@@ -40,10 +32,10 @@ func BuildBPPConfirmJobRequest(payload confirmrequest.SeekerConfirmPayload, tran
 			TTL:           "PT30S",
 			Location: confirmrequest.Location{
 				City: confirmrequest.City{
-					Code: cityCode,
+					Code: payload.Location.City,
 				},
 				Country: confirmrequest.Country{
-					Code: countryCode,
+					Code: payload.Location.Country,
 				},
 			},
 		},

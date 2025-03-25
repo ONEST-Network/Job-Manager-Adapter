@@ -12,14 +12,6 @@ import (
 )
 
 func BuildBPPInitJobRequest(payload initrequest.SeekerInitPayload, transactionId, messageId, bppId, bppuri string, worker *workerProfile.WorkerProfile) (*initrequest.InitRequest, error) {
-	cityCode, err := utils.GetCityCode(payload.Location.City)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get seeker city code for %s, %v", payload.Location.City, err)
-	}
-	countryCode, err := utils.GetCountryCode(payload.Location.Country)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get seeker country code for %s, %v", payload.Location.Country, err)
-	}
 	languages, err := getInitLanguages(worker)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get seeker languages: %v", err)
@@ -39,10 +31,10 @@ func BuildBPPInitJobRequest(payload initrequest.SeekerInitPayload, transactionId
 			TTL:           "PT30S",
 			Location: initrequest.Location{
 				City: initrequest.City{
-					Code: cityCode,
+					Code: payload.Location.City,
 				},
 				Country: initrequest.Country{
-					Code: countryCode,
+					Code: payload.Location.Country,
 				},
 			},
 		},

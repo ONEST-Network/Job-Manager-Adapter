@@ -10,6 +10,7 @@ import (
 	"github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/docs"
 	"github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/pkg/clients"
 	"github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/pkg/database/mongodb"
+	"github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/pkg/cache/redis"
 	dbWorker "github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/pkg/database/mongodb/workerProfile"
 	dbJob "github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/pkg/database/mongodb/job"
 	dbSearchResponse "github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/pkg/database/mongodb/searchResponse"
@@ -35,7 +36,6 @@ func SetupServer(clients *clients.Clients, bppHandler *handlers.OnestBPPHandler)
 	routes.WorkerProfileRouter(workerProfileRouter, clients)
 	
 	routes.BPPOnestRoutes(baseRouter, bppHandler)
-	routes.JobRecommendationRouter(baseRouter, clients)
 	
 	return server
 }
@@ -56,4 +56,17 @@ func InitMongoDB() (*dbWorker.Dao, *dbJob.Dao, *dbSearchResponse.Dao) {
 	searchJobResponse := dbSearchResponse.NewSearchJobResponseDao(mongodb.Client.SearchJobResponse)
 
 	return worker, job, searchJobResponse
+}
+
+func InitRedis() *redis.RedisClient {
+	var err error
+
+	// Initialize redis client
+	redis.Client, err = redis.NewRedisClient()
+	if err != nil {
+		logrus.Fatalf("[Server]: Failed to connect redis client, %v", err)
+	}
+
+	logrus.Info("[Server]: Connected To Redis")
+	return redis.Client
 }

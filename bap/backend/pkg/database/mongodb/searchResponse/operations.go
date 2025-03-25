@@ -33,7 +33,7 @@ func (d *Dao) GetSearchJobResponse(id string) (*SearchJobResponse, error) {
 	defer cancel()
 
 	var jobResponse SearchJobResponse
-	if err := d.Collection.FindOne(ctx, bson.D{{Key: "id", Value: id}}).Decode(&jobResponse); err != nil {
+	if err := d.Collection.FindOne(ctx, bson.D{{Key: "transaction_id", Value: id}}).Decode(&jobResponse); err != nil {
 		return nil, err
 	}
 

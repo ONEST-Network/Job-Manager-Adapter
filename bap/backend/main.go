@@ -31,8 +31,10 @@ func main() {
 	// Initialize mongodb clients
 	seekerClient, jobClient, searchJobResponse := server.InitMongoDB()
 
+	redisClient := server.InitRedis()
+
 	// Set up clients
-	clients := clients.NewClients(jobClient, seekerClient, searchJobResponse)
+	clients := clients.NewClients(jobClient, seekerClient, searchJobResponse, redisClient)
 
 	// Set up the service
 	onestBPPService := service.NewOnestBPPService(clients)

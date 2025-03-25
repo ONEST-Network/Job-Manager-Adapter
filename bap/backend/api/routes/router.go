@@ -23,9 +23,3 @@ func BPPOnestRoutes(router *gin.RouterGroup, handler *handlers.OnestBPPHandler) 
     router.POST("/status", handler.Status())
     router.POST("/cancel", handler.Cancel())
 }
-
-// Add this new function to register job recommendation routes
-func JobRecommendationRouter(router *gin.RouterGroup, clients *clients.Clients) {
-    jobRecommendationHandler := handlers.NewJobRecommendationHandler(clients)
-    router.POST("/recommend_jobs", jobRecommendationHandler.GetJobRecommendations)
-}

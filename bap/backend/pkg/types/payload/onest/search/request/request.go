@@ -12,9 +12,10 @@ type SeekerSearchPayload struct {
 }
 
 type SeekerLocation struct {
-	City    string `json:"city"`
-	State   string `json:"state"`
-	Country string `json:"country"`
+	City        string      `json:"city"`
+	State       string      `json:"state"`
+	Country     string      `json:"country"`
+	AreaCode    string      `json:"area_code"`
 	Coordinates Coordinates `json:"coordinates"`
 }
 
@@ -118,8 +119,8 @@ type Coordinates struct {
 	Longitude float64 `bson:"longitude" json:"longitude"`
 }
 type ProviderLocations struct {
-	City        ProviderCity       `json:"city"`
-	State       ProviderState      `json:"state"`
+	City        ProviderCity     `json:"city"`
+	State       ProviderState    `json:"state"`
 	AreaCode    ProviderAreaCode `json:"areaCode"`
-	Coordinates Coordinates        `json:"coordinates"`
+	Coordinates Coordinates      `json:"coordinates"`
 }

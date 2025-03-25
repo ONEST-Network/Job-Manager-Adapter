@@ -1,23 +1,13 @@
 package onest
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/pkg/config"
 	selectrequest "github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/pkg/types/payload/onest/select/request"
-	"github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/pkg/utils"
 )
 
 func BuildBPPSelectJobRequest(payload selectrequest.SeekerSelectPayload, transactionId, messageId, bppId, bppuri string) (*selectrequest.SelectRequest, error) {
-	cityCode, err := utils.GetCityCode(payload.Location.City)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get seeker city code for %s, %v", payload.Location.City, err)
-	}
-	countryCode, err := utils.GetCountryCode(payload.Location.Country)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get seeker country code for %s, %v", payload.Location.Country, err)
-	}
 	req := selectrequest.SelectRequest{
 		Context: selectrequest.Context{
 			Domain:        "ONDC:ONEST10",
@@ -33,10 +23,10 @@ func BuildBPPSelectJobRequest(payload selectrequest.SeekerSelectPayload, transac
 			TTL:           "PT30S",
 			Location: selectrequest.Location{
 				City: selectrequest.City{
-					Code: cityCode,
+					Code: payload.Location.City,
 				},
 				Country: selectrequest.Country{
-					Code: countryCode,
+					Code: payload.Location.Country,
 				},
 			},
 		},

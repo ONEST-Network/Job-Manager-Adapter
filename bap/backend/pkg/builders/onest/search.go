@@ -1,29 +1,15 @@
 package onest
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/google/uuid"
 
 	"github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/pkg/config"
 	searchrequest "github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/pkg/types/payload/onest/search/request"
-	"github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/pkg/utils"
 )
 
 func BuildBPPSearchJobsRequest(payload searchrequest.SeekerSearchPayload) (*searchrequest.SearchRequest, string, error) {
-	cityCode, err := utils.GetCityCode(payload.Location.City)
-	if err != nil {
-		return nil, "", fmt.Errorf("failed to get seeker city code for %s, %v", payload.Location.City, err)
-	}
-	stateCode, err := utils.GetStateCode(payload.Location.State)
-	if err != nil {
-		return nil, "", fmt.Errorf("failed to get seeker city code for %s, %v", payload.Location.City, err)
-	}
-	countryCode, err := utils.GetCountryCode(payload.Location.Country)
-	if err != nil {
-		return nil, "", fmt.Errorf("failed to get seeker country code for %s, %v", payload.Location.Country, err)
-	}
 	transaction_id := uuid.New().String()
 	req := searchrequest.SearchRequest{
 		Context: searchrequest.Context{
@@ -38,10 +24,10 @@ func BuildBPPSearchJobsRequest(payload searchrequest.SeekerSearchPayload) (*sear
 			TTL:           "PT30S",
 			Location: searchrequest.Location{
 				City: searchrequest.City{
-					Code: cityCode,
+					Code: payload.Location.City,
 				},
 				Country: searchrequest.Country{
-					Code: countryCode,
+					Code: payload.Location.Country,
 				},
 			},
 		},
@@ -59,10 +45,13 @@ func BuildBPPSearchJobsRequest(payload searchrequest.SeekerSearchPayload) (*sear
 					Locations: []searchrequest.ProviderLocations{
 						{
 							City: searchrequest.ProviderCity {
-								Code: cityCode,
+								Code: payload.Location.City,
 							},
 							State: searchrequest.ProviderState {
-								Code: stateCode,
+								Code: payload.Location.State,
+							},
+							AreaCode: searchrequest.ProviderAreaCode {
+								Code: payload.Location.AreaCode,
 							},
 							Coordinates: searchrequest.Coordinates{
 								Latitude:  payload.Location.Coordinates.Latitude,

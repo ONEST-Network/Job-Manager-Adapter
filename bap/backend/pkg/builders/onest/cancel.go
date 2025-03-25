@@ -2,24 +2,14 @@ package onest
 
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/pkg/config"
 	"github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/pkg/database/mongodb/workerProfile"
 	cancelrequest "github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/pkg/types/payload/onest/cancel/request"
-	"github.com/ONEST-Network/Whatsapp-Chatbot/bap/backend/pkg/utils"
 )
 
 func BuildBPPCancelJobRequest(payload cancelrequest.SeekerCancelPayload, bppId, bppuri string, worker *workerProfile.WorkerProfile) (*cancelrequest.CancelRequest, error) {
-	cityCode, err := utils.GetCityCode(payload.Location.City)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get seeker city code for %s, %v", payload.Location.City, err)
-	}
-	countryCode, err := utils.GetCountryCode(payload.Location.Country)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get seeker country code for %s, %v", payload.Location.Country, err)
-	}
 	req := cancelrequest.CancelRequest{
 		Context: cancelrequest.Context{
 			Domain:        "ONDC:ONEST10",
@@ -35,10 +25,10 @@ func BuildBPPCancelJobRequest(payload cancelrequest.SeekerCancelPayload, bppId, 
 			TTL:           "PT30S",
 			Location: cancelrequest.Location{
 				City: cancelrequest.City{
-					Code: cityCode,
+					Code: payload.Location.City,
 				},
 				Country: cancelrequest.Country{
-					Code: countryCode,
+					Code: payload.Location.Country,
 				},
 			},
 		},
