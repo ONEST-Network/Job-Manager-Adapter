@@ -3,7 +3,7 @@ name: "C4GT Community Template"
 description: "Create a new Ticket for C4GT Community"
 title: "[C4GT Community]: "
 labels:
-  - "C4GT Community"
+  - C4GT Community
 
 body:
   - type: textarea
@@ -11,75 +11,75 @@ body:
     validations:
       required: true
     attributes:
-      label: "Ticket Contents"
+      label: Ticket Contents
       default: |
         ## Description
-        [Provide a brief project description, outlining the need and measurable goals of the feature to be developed. 
+        Provide a brief project description, outlining the need and measurable goals of the feature to be developed. 
         Kindly specify the number of users or scale of the product and feature, articulating its anticipated impact 
         and intended use. If this is a bounty ticket, also add the bounty amount. 
         For Design, Mentorship, & Advisory tickets, we recommend making a copy of this 
         [Google Form](https://docs.google.com/forms/d/18EPdoqBUFS6lRoQQbRKKjTvzA711nNTdmU8jinKTXWs/edit)
-        and attaching a link to it. This way you can track applicants and assign the ticket appropriately.]
+        and attaching a link to it. This way you can track applicants and assign the ticket appropriately.
 
   - type: textarea
     id: ticket-goals
     validations:
       required: true
     attributes:
-      label: "Goals"
-      description: "List the goals of the feature."
+      label: Goals
+      description: List the goals of the feature.
       default: |
         ## Goals
-        - [ ] [Goal 1]
-        - [ ] [Goal 2]
-        - [ ] [Goal 3]
-        - [ ] [Goal 4]
-        - [ ] [Goal 5]
-        [Add any installation or setup steps here if relevant.]
+        - [ ] Goal 1
+        - [ ] Goal 2
+        - [ ] Goal 3
+        - [ ] Goal 4
+        - [ ] Goal 5
+        Add any installation or setup steps here if relevant.
 
   - type: textarea
     id: ticket-expected-outcome
     validations:
       required: true
     attributes:
-      label: "Expected Outcome"
-      description: "Describe in detail what the final product or result should look like and how it should behave."
+      label: Expected Outcome
+      description: Describe in detail what the final product or result should look like and how it should behave.
 
   - type: textarea
     id: ticket-acceptance-criteria
     attributes:
-      label: "Acceptance Criteria"
-      description: "List the acceptance criteria for this feature."
+      label: Acceptance Criteria
+      description: List the acceptance criteria for this feature.
 
   - type: textarea
     id: ticket-implementation-details
     validations:
       required: true
     attributes:
-      label: "Implementation Details"
-      description: "List any technical details, technologies, or frameworks required."
+      label: Implementation Details
+      description: List any technical details, technologies, or frameworks required.
 
   - type: textarea
     id: ticket-mockups
     attributes:
-      label: "Mockups/Wireframes"
-      description: "Include links to any visual aids, mockups, wireframes, or diagrams that illustrate the final product."
+      label: Mockups/Wireframes
+      description: Include links to any visual aids, mockups, wireframes, or diagrams that illustrate the final product.
 
   - type: input
     id: ticket-product
     validations:
       required: true
     attributes:
-      label: "Product Name"
-      placeholder: "Enter Product Name"
+      label: Product Name
+      placeholder: Enter Product Name
 
   - type: dropdown
     id: ticket-organisation
     validations:
       required: true
     attributes:
-      label: "Organisation Name"
-      description: "Choose an organisation"
+      label: Organisation Name
+      description: Choose an organisation
       multiple: false
       options:
         - C4GT
@@ -95,16 +95,16 @@ body:
   - type: input
     id: ticket-governance-domain
     attributes:
-      label: "Domain"
-      placeholder: "Enter Area of Governance"
+      label: Domain
+      placeholder: Enter Area of Governance
 
   - type: dropdown
     id: ticket-technical-skills-required
     validations:
       required: true
     attributes:
-      label: "Tech Skills Needed"
-      description: "Select the tech stack for this ticket (use Ctrl/Command to select multiple)."
+      label: Tech Skills Needed
+      description: Select the tech stack for this ticket (use Ctrl/Command to select multiple).
       multiple: true
       options:
         - .NET
@@ -196,22 +196,22 @@ body:
     validations:
       required: true
     attributes:
-      label: "Organizational Mentor"
-      description: "Tag or list relevant mentors for the ticket."
+      label: Organizational Mentor
+      description: Tag or list relevant mentors for the ticket.
 
   - type: textarea
     id: ticketangel-mentors
     attributes:
-      label: "Angel Mentor"
-      description: "Tag or list relevant mentors for the ticket (if any)."
+      label: Angel Mentor
+      description: Tag or list relevant mentors for the ticket (if any).
 
   - type: dropdown
     id: ticket-complexity
     validations:
       required: true
     attributes:
-      label: "Complexity"
-      description: "Choose a complexity describing this ticket."
+      label: Complexity
+      description: Choose a complexity describing this ticket.
       multiple: false
       options:
         - Low
@@ -223,8 +223,8 @@ body:
     validations:
       required: true
     attributes:
-      label: "Category"
-      description: "Choose the categories that best describe this ticket."
+      label: Category
+      description: Choose the categories that best describe this ticket.
       multiple: true
       options:
         - API
@@ -239,7 +239,7 @@ body:
         - Data Science
         - Deprecation
         - Documentation
-        - Delpoyment
+        - Deployment
         - Frontend
         - Internationalization
         - Localization
