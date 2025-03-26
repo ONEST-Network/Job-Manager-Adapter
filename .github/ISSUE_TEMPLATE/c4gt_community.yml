@@ -1,9 +1,7 @@
-name: "C4GT Community Template"
-description: "Create or update a C4GT Community ticket"
+name: C4GT Community Template
+description: Create a new Ticket for C4GT Community
 title: "[C4GT Community]: "
-labels:
-  - "C4GT Community"
-
+labels: ["Please add the C4GT Community Label on all tickets that you will list. In addition to this, please add whichever labels best describe your project from this list: C4GT Community, C4GT Coding, C4GT Design, C4GT Mentorship, C4GT Bounty, C4GT Advisory"]
 body:
   - type: textarea
     id: ticket-description
@@ -13,29 +11,7 @@ body:
       label: Ticket Contents
       default: |
         ## Description
-        Organizations like Protean Vidyasarthi, Scholarlify, and Physics Wallah want to run 
-        financial support or scholarship scheme trials quickly without needing to invest 
-        heavily in understanding and implementing the full protocol stack.
-
-        Scheme Manager aims to solve this by creating a lightweight adapter that exposes 
-        a minimal set of Low Code APIs to integrate quickly with the ONEST financial support 
-        protocol.
-
-        **Key functionalities**:
-        - **PushSchemes**: Push schemes with defined eligibility.
-        - **GetApplications**: Fetch applications from the network, auto-validated for eligibility.
-        - **UpdateStatus**: Update the status of schemes or applications.
-
-        With just ~10 lines of code, an organization can start running scheme trials on 
-        the ONEST Network, saving time and cost.
-
-        **Reference links**:
-        - Pre-read (Link here)
-        - Sample Code (Link here)
-        - Protocol Specs (Link here)
-
-        **Expected Timeline**: 2–3 weeks  
-        **Bounty (if applicable)**: TBD
+        [Provide a brief project description, outlining the need and measurable goals of the feature to be developed. Kindly, specify the number of users or scale of the product and feature, articulating its anticipated impact and intended use. Kindly also add the bounty amount you are willing to pay in case of this being a bounty ticket. For Design, Mentorship & Advisory tickets, we request you to make a copy of this google form (https://docs.google.com/forms/d/18EPdoqBUFS6lRoQQbRKKjTvzA711nNTdmU8jinKTXWs/edit) in your own drive and attach a link to it in the issue ticket for contributors to fill in. This way you will be able to see all the applications that come in and assign it to the selected contributor.]
 
   - type: textarea
     id: ticket-goals
@@ -46,13 +22,12 @@ body:
       description: List the goals of the feature.
       default: |
         ## Goals
-        - [ ] Design API contracts for PushSchemes, GetApplications, UpdateStatus
-        - [ ] Implement a stateless Go-based microservice with REST APIs
-        - [ ] Integrate a lightweight in-service database (PostgreSQL preferred)
-        - [ ] Dockerize the adapter for local deployment
-        - [ ] Provide sample client integration (~10 lines of code)
-
-        [Setup Guide: Will be linked once MVP is implemented.]
+        - [ ] [Goal 1]
+        - [ ] [Goal 2]
+        - [ ] [Goal 3]
+        - [ ] [Goal 4]
+        - [ ] [Goal 5]
+        [Kindly, state and link installation guide/ set-up steps (if any) in this section]
 
   - type: textarea
     id: ticket-expected-outcome
@@ -60,28 +35,13 @@ body:
       required: true
     attributes:
       label: Expected Outcome
-      description: Describe in detail what the final product or result should look like.
-      default: |
-        ## Expected Outcome
-        A dockerized, stateless Go microservice that serves as an integration adapter 
-        for the ONEST financial support protocol. It should:
-        - Expose 3 key APIs (PushSchemes, GetApplications, UpdateStatus)
-        - Perform automatic eligibility validation using ONEST protocol rules
-        - Allow external clients to integrate easily via sample code (~10 LoC)
-        - Serve as a foundation for future production-ready adapters
+      description: Describe in detail what the final product or result should look like and how it should behave.
 
   - type: textarea
     id: ticket-acceptance-criteria
     attributes:
       label: Acceptance Criteria
       description: List the acceptance criteria for this feature.
-      default: |
-        ## Acceptance Criteria
-        - [ ] APIs respond correctly to valid inputs and handle invalid inputs gracefully
-        - [ ] Auto-validation of applicant eligibility using ONEST protocol credentials
-        - [ ] Adapter runs in a Docker container with minimal configuration
-        - [ ] Adapter is stateless with a persistent store for schemes and applications
-        - [ ] Sample integration works with minimal developer effort (~10 lines of code)
 
   - type: textarea
     id: ticket-implementation-details
@@ -89,39 +49,24 @@ body:
       required: true
     attributes:
       label: Implementation Details
-      description: List any technical details, including technologies to be used.
-      default: |
-        ## Implementation Details
-        - **Language**: Go
-        - **Microservice Architecture**: Stateless with REST endpoints
-        - **Database**: PostgreSQL preferred (lightweight in-service DB)
-        - **Deployment**: Docker container
-        - **Security**: Minimal for now; subject to future enhancements
-        - **Protocol Integration**: Based on ONEST financial support protocol specs
-        - **Design Paradigm**: Clean and modular for plug-and-play readiness
+      description: List any technical details about the proposed implementation, including any specific technologies that will be used.
 
   - type: textarea
     id: ticket-mockups
     attributes:
       label: Mockups/Wireframes
-      description: Links to any visual aids, mockups, or diagrams.
-      default: |
-        ## Mockups/Wireframes
-        N/A at this stage — API contract design will be shared during implementation.
+      description: Include links to any visual aids, mockups, wireframes, or diagrams that help illustrate what the final product should look like. This is not always necessary, but can be very helpful in many cases.
 
   - type: input
     id: ticket-product
-    validations:
-      required: true
     attributes:
       label: Product Name
       placeholder: Enter Product Name
-      default: "Scheme Manager"
+    validations:
+      required: true
 
   - type: dropdown
     id: ticket-organisation
-    validations:
-      required: true
     attributes:
       label: Organisation Name
       description: Enter Organisation Name
@@ -136,22 +81,20 @@ body:
         - Tibil
         - ONDC
         - ONEST
-      default: "ONEST"
+    validations:
+      required: true
 
   - type: input
     id: ticket-governance-domain
     attributes:
       label: Domain
       placeholder: Enter Area of Governance
-      default: "Financial Support, Governance Tech, Low-Code Integrations"
 
   - type: dropdown
     id: ticket-technical-skills-required
-    validations:
-      required: true
     attributes:
       label: Tech Skills Needed
-      description: Select the technologies needed for this ticket (Ctrl/Command to select multiple)
+      description: Select the technologies needed for this ticket (use Ctrl or Command to select multiple)
       multiple: true
       options:
         - .NET
@@ -237,48 +180,40 @@ body:
         - WebSockets
         - Webpack
         - Other
-      default:
-        - Go
-        - Docker
-        - PostgreSQL
-        - Microservices
-        - RESTful APIs
+    validations:
+      required: true
 
   - type: textarea
     id: ticketorg-mentors
-    validations:
-      required: true
     attributes:
       label: Organizational Mentor
       description: Please tag relevant mentors for the ticket
-      default: |
-        TBD (Please tag appropriate folks once known)
+    validations:
+      required: true
 
   - type: textarea
     id: ticketangel-mentors
     attributes:
       label: Angel Mentor
       description: Please tag relevant mentors for the ticket
-      default: ""
+    validations:
+      required: false
 
   - type: dropdown
     id: ticket-complexity
-    validations:
-      required: true
     attributes:
       label: Complexity
-      description: Choose a complexity for your ticket
+      description: Choose a complexity describing the complexity of your ticket
       multiple: false
       options:
         - Low
         - Medium
         - High
-      default: "Medium"
+    validations:
+      required: true
 
   - type: dropdown
     id: ticket-category
-    validations:
-      required: true
     attributes:
       label: Category
       description: Choose the categories that best describe your ticket
@@ -312,8 +247,5 @@ body:
         - Security
         - Testing
         - Other
-      default:
-        - API
-        - Backend
-        - Database
-        - CI/CD
+    validations:
+      required: true
