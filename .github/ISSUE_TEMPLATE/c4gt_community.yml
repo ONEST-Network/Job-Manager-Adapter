@@ -1,309 +1,315 @@
-- type: textarea
-  id: ticket-description
-  validations:
-    required: true
-  attributes:
-    label: Ticket Contents
-    value: |
-      ## Description
-      Organizations like Protean Vidyasarthi, Scholarlify, and Physics Wallah want to run financial support or scholarship scheme trials quickly without needing to invest heavily in understanding and implementing the full protocol stack.
+# name: "C4GT Community Template"
+description: "Create or update a C4GT Community ticket"
+title: "[C4GT Community]: "
+labels:
+  - "C4GT Community"
 
-      Scheme Manager aims to solve this by creating a lightweight adapter that exposes a minimal set of Low Code APIs to integrate quickly with the ONEST financial support protocol.
-
-      **Key functionalities**:
-      - **PushSchemes**: Push schemes with defined eligibility.
-      - **GetApplications**: Fetch applications from the network, auto-validated for eligibility.
-      - **UpdateStatus**: Update the status of schemes or applications.
-
-      With just ~10 lines of code, an organization can start running scheme trials on the ONEST Network, saving time and cost.
-
-      **Reference links**:  
-      - Pre-read (Link here)  
-      - Sample Code (Link here)  
-      - Protocol Specs (Link here)  
-
-      **Expected Timeline**: 2–3 weeks  
-      **Bounty (if applicable)**: TBD
-
-- type: textarea
-  id: ticket-goals
-  validations:
-    required: true
-  attributes:
-    label: Goals
-    description: List the goals of the feature.
-    value: |
-      ## Goals
-      - [ ] Design API contracts for PushSchemes, GetApplications, UpdateStatus
-      - [ ] Implement a stateless Go-based microservice with REST APIs
-      - [ ] Integrate a lightweight in-service database (PostgreSQL preferred)
-      - [ ] Dockerize the adapter for local deployment
-      - [ ] Provide sample client integration (~10 lines of code)
-
-      [Setup Guide: Will be linked once MVP is implemented.]
-
-- type: textarea
-  id: ticket-expected-outcome
-  validations:
-    required: true
-  attributes:
-    label: Expected Outcome
-    description: Describe in detail what the final product or result should look like and how it should behave.
-    value: |
-      ## Expected Outcome
-      A dockerized, stateless Go microservice that serves as an integration adapter for the ONEST financial support protocol. It should:
-      - Expose 3 key APIs (PushSchemes, GetApplications, UpdateStatus)
-      - Perform automatic eligibility validation using ONEST protocol rules
-      - Allow external clients to integrate easily via sample code (~10 LoC)
-      - Serve as a foundation for future production-ready adapters
-
-- type: textarea
-  id: ticket-acceptance-criteria
-  attributes:
-    label: Acceptance Criteria
-    description: List the acceptance criteria for this feature.
-    value: |
-      ## Acceptance Criteria
-      - [ ] APIs respond correctly to valid inputs and handle invalid inputs gracefully
-      - [ ] Auto-validation of applicant eligibility using ONEST protocol credentials
-      - [ ] Adapter runs in a Docker container with minimal configuration
-      - [ ] Adapter is stateless with a persistent store for schemes and applications
-      - [ ] Sample integration works with minimal developer effort (~10 lines of code)
-
-- type: textarea
-  id: ticket-implementation-details
-  validations:
-    required: true
-  attributes:
-    label: Implementation Details
-    description: List any technical details about the proposed implementation, including any specific technologies that will be used.
-    value: |
-      ## Implementation Details
-      - **Language**: Go
-      - **Microservice Architecture**: Stateless with REST endpoints
-      - **Database**: PostgreSQL preferred (lightweight in-service DB)
-      - **Deployment**: Docker container
-      - **Security**: Minimal for now; subject to future enhancements
-      - **Protocol Integration**: Based on ONEST financial support protocol specs
-      - **Design Paradigm**: Clean and modular for plug-and-play readiness
-
-- type: textarea
-  id: ticket-mockups
-  attributes:
-    label: Mockups/Wireframes
-    description: Include links to any visual aids, mockups, or diagrams that help illustrate what the final product should look like.
-    value: |
-      ## Mockups/Wireframes
-      N/A at this stage — API contract design will be shared during implementation.
-
-- type: input
-  id: ticket-product
-  attributes:
-    label: Product Name
-    placeholder: Enter Product Name
-  validations:
-    required: true
-  value: "Scheme Manager"
-
-- type: dropdown
-  id: ticket-organisation
-  attributes:
-    label: Organisation Name
-    description: Enter Organisation Name
-    multiple: false
-    options:
-      - C4GT
-      - Dhiway
-      - FIDE
-      - SamagraX
-      - ShikshaLokam
-      - Tech4Dev
-      - Tibil
-      - ONDC
-      - ONEST
-  validations:
-    required: true
-  value: "ONEST"
-
-- type: input
-  id: ticket-governance-domain
-  attributes:
-    label: Domain
-    placeholder: Enter Area of Governance
-  value: "Financial Support, Governance Tech, Low-Code Integrations"
-
-- type: dropdown
-  id: ticket-technical-skills-required
-  attributes:
-    label: Tech Skills Needed
-    description: Select the technologies needed for this ticket (use Ctrl or Command to select multiple)
-    multiple: true
-    options:
-      - .NET
-      - Agile
-      - Angular
-      - Artificial Intelligence
-      - ASP.NET
-      - AWS
-      - Babel
-      - Bootstrap
-      - C#
-      - Chart.js
-      - CI/CD
-      - Computer Vision
-      - CORS
-      - cURL
-      - Cypress
-      - D3.js
-      - Database
-      - Debugging
-      - Design
-      - DevOps
-      - Django
-      - Docker
-      - Electron
-      - ESLint
-      - Express.js
-      - Feature
-      - Flask
-      - Go
-      - GraphQL
-      - HTML
-      - Ionic
-      - Jest
-      - Java
-      - JavaScript
-      - Jenkins
-      - JWT
-      - Kubernetes
-      - Laravel
-      - Machine Learning
-      - Maintenance
-      - Markdown
-      - Material-UI
-      - Microservices
-      - MongoDB
-      - Mobile
-      - Mockups
-      - Mocha
-      - Natural Language Processing
-      - NestJS
-      - Node.js
-      - NUnit
-      - OAuth
-      - Performance Improvement
-      - Prettier
-      - Python
-      - Question
-      - React
-      - React Native
-      - Redux
-      - RESTful APIs
-      - Ruby
-      - Ruby on Rails
-      - Rust
-      - Scala
-      - Security
-      - Selenium
-      - SEO
-      - Serverless
-      - Solidity
-      - Spring Boot
-      - SQL
-      - Swagger
-      - Tailwind CSS
-      - Test
-      - Testing Library
-      - Three.js
-      - TypeScript
-      - UI/UX/Design
-      - Virtual Reality
-      - Vue.js
-      - WebSockets
-      - Webpack
-      - Other
+body:
+  - type: textarea
+    id: ticket-description
     validations:
       required: true
-  value:
-    - Go
-    - Docker
-    - PostgreSQL
-    - Microservices
-    - RESTful APIs
+    attributes:
+      label: Ticket Contents
+      value: |
+        ## Description
+        Organizations like Protean Vidyasarthi, Scholarlify, and Physics Wallah want to run financial support or scholarship scheme trials quickly without needing to invest heavily in understanding and implementing the full protocol stack.
 
-- type: textarea
-  id: ticketorg-mentors
-  attributes:
-    label: Organizational Mentor
-    description: Please tag relevant mentors for the ticket
-  validations:
-    required: true
-  value: |
-    TBD (Please tag appropriate folks once known)
+        Scheme Manager aims to solve this by creating a lightweight adapter that exposes a minimal set of Low Code APIs to integrate quickly with the ONEST financial support protocol.
 
-- type: textarea
-  id: ticketangel-mentors
-  attributes:
-    label: Angel Mentor
-    description: Please tag relevant mentors for the ticket
-  validations:
-    required: false
-  value: ""
+        **Key functionalities**:
+        - **PushSchemes**: Push schemes with defined eligibility.
+        - **GetApplications**: Fetch applications from the network, auto-validated for eligibility.
+        - **UpdateStatus**: Update the status of schemes or applications.
 
-- type: dropdown
-  id: ticket-complexity
-  attributes:
-    label: Complexity
-    description: Choose a complexity describing the complexity of your ticket
-    multiple: false
-    options:
-      - Low
-      - Medium
-      - High
-  validations:
-    required: true
-  value: "Medium"
+        With just ~10 lines of code, an organization can start running scheme trials on the ONEST Network, saving time and cost.
 
-- type: dropdown
-  id: ticket-category
-  attributes:
-    label: Category
-    description: Choose the categories that best describe your ticket
-    multiple: true
-    options:
+        **Reference links**:
+        - Pre-read (Link here)
+        - Sample Code (Link here)
+        - Protocol Specs (Link here)
+
+        **Expected Timeline**: 2–3 weeks  
+        **Bounty (if applicable)**: TBD
+
+  - type: textarea
+    id: ticket-goals
+    validations:
+      required: true
+    attributes:
+      label: Goals
+      description: "List the goals of the feature."
+      value: |
+        ## Goals
+        - [ ] Design API contracts for PushSchemes, GetApplications, UpdateStatus
+        - [ ] Implement a stateless Go-based microservice with REST APIs
+        - [ ] Integrate a lightweight in-service database (PostgreSQL preferred)
+        - [ ] Dockerize the adapter for local deployment
+        - [ ] Provide sample client integration (~10 lines of code)
+
+        [Setup Guide: Will be linked once MVP is implemented.]
+
+  - type: textarea
+    id: ticket-expected-outcome
+    validations:
+      required: true
+    attributes:
+      label: Expected Outcome
+      description: "Describe in detail what the final product or result should look like and how it should behave."
+      value: |
+        ## Expected Outcome
+        A dockerized, stateless Go microservice that serves as an integration adapter for the ONEST financial support protocol. It should:
+        - Expose 3 key APIs (PushSchemes, GetApplications, UpdateStatus)
+        - Perform automatic eligibility validation using ONEST protocol rules
+        - Allow external clients to integrate easily via sample code (~10 LoC)
+        - Serve as a foundation for future production-ready adapters
+
+  - type: textarea
+    id: ticket-acceptance-criteria
+    attributes:
+      label: Acceptance Criteria
+      description: "List the acceptance criteria for this feature."
+      value: |
+        ## Acceptance Criteria
+        - [ ] APIs respond correctly to valid inputs and handle invalid inputs gracefully
+        - [ ] Auto-validation of applicant eligibility using ONEST protocol credentials
+        - [ ] Adapter runs in a Docker container with minimal configuration
+        - [ ] Adapter is stateless with a persistent store for schemes and applications
+        - [ ] Sample integration works with minimal developer effort (~10 lines of code)
+
+  - type: textarea
+    id: ticket-implementation-details
+    validations:
+      required: true
+    attributes:
+      label: Implementation Details
+      description: "List any technical details about the proposed implementation, including any specific technologies that will be used."
+      value: |
+        ## Implementation Details
+        - **Language**: Go
+        - **Microservice Architecture**: Stateless with REST endpoints
+        - **Database**: PostgreSQL preferred (lightweight in-service DB)
+        - **Deployment**: Docker container
+        - **Security**: Minimal for now; subject to future enhancements
+        - **Protocol Integration**: Based on ONEST financial support protocol specs
+        - **Design Paradigm**: Clean and modular for plug-and-play readiness
+
+  - type: textarea
+    id: ticket-mockups
+    attributes:
+      label: Mockups/Wireframes
+      description: "Include links to any visual aids, mockups, or diagrams."
+      value: |
+        ## Mockups/Wireframes
+        N/A at this stage — API contract design will be shared during implementation.
+
+  - type: input
+    id: ticket-product
+    attributes:
+      label: Product Name
+      placeholder: "Enter Product Name"
+    validations:
+      required: true
+    value: "Scheme Manager"
+
+  - type: dropdown
+    id: ticket-organisation
+    attributes:
+      label: Organisation Name
+      description: "Enter Organisation Name"
+      multiple: false
+      options:
+        - C4GT
+        - Dhiway
+        - FIDE
+        - SamagraX
+        - ShikshaLokam
+        - Tech4Dev
+        - Tibil
+        - ONDC
+        - ONEST
+    validations:
+      required: true
+    value: "ONEST"
+
+  - type: input
+    id: ticket-governance-domain
+    attributes:
+      label: Domain
+      placeholder: "Enter Area of Governance"
+    value: "Financial Support, Governance Tech, Low-Code Integrations"
+
+  - type: dropdown
+    id: ticket-technical-skills-required
+    attributes:
+      label: Tech Skills Needed
+      description: "Select the technologies needed for this ticket (use Ctrl or Command to select multiple)"
+      multiple: true
+      options:
+        - .NET
+        - Agile
+        - Angular
+        - Artificial Intelligence
+        - ASP.NET
+        - AWS
+        - Babel
+        - Bootstrap
+        - C#
+        - Chart.js
+        - CI/CD
+        - Computer Vision
+        - CORS
+        - cURL
+        - Cypress
+        - D3.js
+        - Database
+        - Debugging
+        - Design
+        - DevOps
+        - Django
+        - Docker
+        - Electron
+        - ESLint
+        - Express.js
+        - Feature
+        - Flask
+        - Go
+        - GraphQL
+        - HTML
+        - Ionic
+        - Jest
+        - Java
+        - JavaScript
+        - Jenkins
+        - JWT
+        - Kubernetes
+        - Laravel
+        - Machine Learning
+        - Maintenance
+        - Markdown
+        - Material-UI
+        - Microservices
+        - MongoDB
+        - Mobile
+        - Mockups
+        - Mocha
+        - Natural Language Processing
+        - NestJS
+        - Node.js
+        - NUnit
+        - OAuth
+        - Performance Improvement
+        - Prettier
+        - Python
+        - Question
+        - React
+        - React Native
+        - Redux
+        - RESTful APIs
+        - Ruby
+        - Ruby on Rails
+        - Rust
+        - Scala
+        - Security
+        - Selenium
+        - SEO
+        - Serverless
+        - Solidity
+        - Spring Boot
+        - SQL
+        - Swagger
+        - Tailwind CSS
+        - Test
+        - Testing Library
+        - Three.js
+        - TypeScript
+        - UI/UX/Design
+        - Virtual Reality
+        - Vue.js
+        - WebSockets
+        - Webpack
+        - Other
+    validations:
+      required: true
+    value:
+      - Go
+      - Docker
+      - PostgreSQL
+      - Microservices
+      - RESTful APIs
+
+  - type: textarea
+    id: ticketorg-mentors
+    attributes:
+      label: Organizational Mentor
+      description: "Please tag relevant mentors for the ticket"
+    validations:
+      required: true
+    value: |
+      TBD (Please tag appropriate folks once known)
+
+  - type: textarea
+    id: ticketangel-mentors
+    attributes:
+      label: Angel Mentor
+      description: "Please tag relevant mentors for the ticket"
+    validations:
+      required: false
+    value: ""
+
+  - type: dropdown
+    id: ticket-complexity
+    attributes:
+      label: Complexity
+      description: "Choose a complexity describing the complexity of your ticket"
+      multiple: false
+      options:
+        - Low
+        - Medium
+        - High
+    validations:
+      required: true
+    value: "Medium"
+
+  - type: dropdown
+    id: ticket-category
+    attributes:
+      label: Category
+      description: "Choose the categories that best describe your ticket"
+      multiple: true
+      options:
+        - API
+        - Analytics
+        - Accessibility
+        - Backend
+        - Breaking Change
+        - Beginner Friendly
+        - Configuration
+        - CI/CD
+        - Database
+        - Data Science
+        - Deprecation
+        - Documentation
+        - Delpoyment
+        - Frontend
+        - Internationalization
+        - Localization
+        - Machine Learning
+        - Maintenance
+        - Mobile
+        - Performance Improvement
+        - Question
+        - Refactoring
+        - Research
+        - Needs Reproduction
+        - SEO
+        - Security
+        - Testing
+        - Other
+    validations:
+      required: true
+    value:
       - API
-      - Analytics
-      - Accessibility
       - Backend
-      - Breaking Change
-      - Beginner Friendly
-      - Configuration
-      - CI/CD
       - Database
-      - Data Science
-      - Deprecation
-      - Documentation
-      - Delpoyment
-      - Frontend
-      - Internationalization
-      - Localization
-      - Machine Learning
-      - Maintenance
-      - Mobile
-      - Performance Improvement
-      - Question
-      - Refactoring
-      - Research
-      - Needs Reproduction
-      - SEO
-      - Security
-      - Testing
-      - Other
-  validations:
-    required: true
-  value:
-    - API
-    - Backend
-    - Database
-    - CI/CD
-  
+      - CI/CD
