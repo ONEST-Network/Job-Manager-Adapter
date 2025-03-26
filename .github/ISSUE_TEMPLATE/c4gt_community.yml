@@ -11,18 +11,23 @@ body:
       required: true
     attributes:
       label: Ticket Contents
-      value: |
+      default: |
         ## Description
-        Organizations like Protean Vidyasarthi, Scholarlify, and Physics Wallah want to run financial support or scholarship scheme trials quickly without needing to invest heavily in understanding and implementing the full protocol stack.
+        Organizations like Protean Vidyasarthi, Scholarlify, and Physics Wallah want to run 
+        financial support or scholarship scheme trials quickly without needing to invest 
+        heavily in understanding and implementing the full protocol stack.
 
-        Scheme Manager aims to solve this by creating a lightweight adapter that exposes a minimal set of Low Code APIs to integrate quickly with the ONEST financial support protocol.
+        Scheme Manager aims to solve this by creating a lightweight adapter that exposes 
+        a minimal set of Low Code APIs to integrate quickly with the ONEST financial support 
+        protocol.
 
         **Key functionalities**:
         - **PushSchemes**: Push schemes with defined eligibility.
         - **GetApplications**: Fetch applications from the network, auto-validated for eligibility.
         - **UpdateStatus**: Update the status of schemes or applications.
 
-        With just ~10 lines of code, an organization can start running scheme trials on the ONEST Network, saving time and cost.
+        With just ~10 lines of code, an organization can start running scheme trials on 
+        the ONEST Network, saving time and cost.
 
         **Reference links**:
         - Pre-read (Link here)
@@ -38,8 +43,8 @@ body:
       required: true
     attributes:
       label: Goals
-      description: "List the goals of the feature."
-      value: |
+      description: List the goals of the feature.
+      default: |
         ## Goals
         - [ ] Design API contracts for PushSchemes, GetApplications, UpdateStatus
         - [ ] Implement a stateless Go-based microservice with REST APIs
@@ -55,10 +60,11 @@ body:
       required: true
     attributes:
       label: Expected Outcome
-      description: "Describe in detail what the final product or result should look like and how it should behave."
-      value: |
+      description: Describe in detail what the final product or result should look like.
+      default: |
         ## Expected Outcome
-        A dockerized, stateless Go microservice that serves as an integration adapter for the ONEST financial support protocol. It should:
+        A dockerized, stateless Go microservice that serves as an integration adapter 
+        for the ONEST financial support protocol. It should:
         - Expose 3 key APIs (PushSchemes, GetApplications, UpdateStatus)
         - Perform automatic eligibility validation using ONEST protocol rules
         - Allow external clients to integrate easily via sample code (~10 LoC)
@@ -68,8 +74,8 @@ body:
     id: ticket-acceptance-criteria
     attributes:
       label: Acceptance Criteria
-      description: "List the acceptance criteria for this feature."
-      value: |
+      description: List the acceptance criteria for this feature.
+      default: |
         ## Acceptance Criteria
         - [ ] APIs respond correctly to valid inputs and handle invalid inputs gracefully
         - [ ] Auto-validation of applicant eligibility using ONEST protocol credentials
@@ -83,8 +89,8 @@ body:
       required: true
     attributes:
       label: Implementation Details
-      description: "List any technical details about the proposed implementation, including any specific technologies that will be used."
-      value: |
+      description: List any technical details, including technologies to be used.
+      default: |
         ## Implementation Details
         - **Language**: Go
         - **Microservice Architecture**: Stateless with REST endpoints
@@ -98,25 +104,27 @@ body:
     id: ticket-mockups
     attributes:
       label: Mockups/Wireframes
-      description: "Include links to any visual aids, mockups, or diagrams."
-      value: |
+      description: Links to any visual aids, mockups, or diagrams.
+      default: |
         ## Mockups/Wireframes
         N/A at this stage — API contract design will be shared during implementation.
 
   - type: input
     id: ticket-product
-    attributes:
-      label: Product Name
-      placeholder: "Enter Product Name"
     validations:
       required: true
-    value: "Scheme Manager"
+    attributes:
+      label: Product Name
+      placeholder: Enter Product Name
+      default: "Scheme Manager"
 
   - type: dropdown
     id: ticket-organisation
+    validations:
+      required: true
     attributes:
       label: Organisation Name
-      description: "Enter Organisation Name"
+      description: Enter Organisation Name
       multiple: false
       options:
         - C4GT
@@ -128,22 +136,22 @@ body:
         - Tibil
         - ONDC
         - ONEST
-    validations:
-      required: true
-    value: "ONEST"
+      default: "ONEST"
 
   - type: input
     id: ticket-governance-domain
     attributes:
       label: Domain
-      placeholder: "Enter Area of Governance"
-    value: "Financial Support, Governance Tech, Low-Code Integrations"
+      placeholder: Enter Area of Governance
+      default: "Financial Support, Governance Tech, Low-Code Integrations"
 
   - type: dropdown
     id: ticket-technical-skills-required
+    validations:
+      required: true
     attributes:
       label: Tech Skills Needed
-      description: "Select the technologies needed for this ticket (use Ctrl or Command to select multiple)"
+      description: Select the technologies needed for this ticket (Ctrl/Command to select multiple)
       multiple: true
       options:
         - .NET
@@ -229,53 +237,51 @@ body:
         - WebSockets
         - Webpack
         - Other
-    validations:
-      required: true
-    value:
-      - Go
-      - Docker
-      - PostgreSQL
-      - Microservices
-      - RESTful APIs
+      default:
+        - Go
+        - Docker
+        - PostgreSQL
+        - Microservices
+        - RESTful APIs
 
   - type: textarea
     id: ticketorg-mentors
-    attributes:
-      label: Organizational Mentor
-      description: "Please tag relevant mentors for the ticket"
     validations:
       required: true
-    value: |
-      TBD (Please tag appropriate folks once known)
+    attributes:
+      label: Organizational Mentor
+      description: Please tag relevant mentors for the ticket
+      default: |
+        TBD (Please tag appropriate folks once known)
 
   - type: textarea
     id: ticketangel-mentors
     attributes:
       label: Angel Mentor
-      description: "Please tag relevant mentors for the ticket"
-    validations:
-      required: false
-    value: ""
+      description: Please tag relevant mentors for the ticket
+      default: ""
 
   - type: dropdown
     id: ticket-complexity
+    validations:
+      required: true
     attributes:
       label: Complexity
-      description: "Choose a complexity describing the complexity of your ticket"
+      description: Choose a complexity for your ticket
       multiple: false
       options:
         - Low
         - Medium
         - High
-    validations:
-      required: true
-    value: "Medium"
+      default: "Medium"
 
   - type: dropdown
     id: ticket-category
+    validations:
+      required: true
     attributes:
       label: Category
-      description: "Choose the categories that best describe your ticket"
+      description: Choose the categories that best describe your ticket
       multiple: true
       options:
         - API
@@ -306,10 +312,8 @@ body:
         - Security
         - Testing
         - Other
-    validations:
-      required: true
-    value:
-      - API
-      - Backend
-      - Database
-      - CI/CD
+      default:
+        - API
+        - Backend
+        - Database
+        - CI/CD
