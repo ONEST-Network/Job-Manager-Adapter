@@ -11,26 +11,23 @@ body:
       required: true
     attributes:
       label: Ticket Contents
-      value: |
+      description: "Provide a detailed description of the ticket"
+      placeholder: |
         ## Description
-        Organizations like Protean Vidyasarthi, Scholarlify, and Physics Wallah want to run financial support or scholarship scheme trials quickly without needing to invest heavily in understanding and implementing the full protocol stack.
-
-        Scheme Manager aims to solve this by creating a lightweight adapter that exposes a minimal set of Low Code APIs to integrate quickly with the ONEST financial support protocol.
+        [Provide a brief project description, outlining the need and measurable goals]
 
         **Key functionalities**:
-        - **PushSchemes**: Push schemes with defined eligibility.
-        - **GetApplications**: Fetch applications from the network, auto-validated for eligibility.
-        - **UpdateStatus**: Update the status of schemes or applications.
-
-        With just ~10 lines of code, an organization can start running scheme trials on the ONEST Network, saving time and cost.
+        - Feature 1
+        - Feature 2
+        - Feature 3
 
         **Reference links**:
-        - Pre-read (Link here)
-        - Sample Code (Link here)
-        - Protocol Specs (Link here)
+        - Link 1
+        - Link 2
+        - Link 3
 
-        **Expected Timeline**: 2–3 weeks  
-        **Bounty (if applicable)**: TBD
+        **Expected Timeline**: 
+        **Bounty (if applicable)**: 
 
   - type: textarea
     id: ticket-goals
@@ -38,16 +35,16 @@ body:
       required: true
     attributes:
       label: Goals
-      description: "List the goals of the feature."
-      value: |
+      description: "List the goals of the feature"
+      placeholder: |
         ## Goals
-        - [ ] Design API contracts for PushSchemes, GetApplications, UpdateStatus
-        - [ ] Implement a stateless Go-based microservice with REST APIs
-        - [ ] Integrate a lightweight in-service database (PostgreSQL preferred)
-        - [ ] Dockerize the adapter for local deployment
-        - [ ] Provide sample client integration (~10 lines of code)
+        - [ ] Goal 1
+        - [ ] Goal 2
+        - [ ] Goal 3
+        - [ ] Goal 4
+        - [ ] Goal 5
 
-        [Setup Guide: Will be linked once MVP is implemented.]
+        [Setup Guide/Documentation links if any]
 
   - type: textarea
     id: ticket-expected-outcome-contributor
@@ -55,14 +52,13 @@ body:
       required: true
     attributes:
       label: Expected Outcome from Contributor
-      description: "Describe in detail what the final product or result should look like and how it should behave."
-      value: |
+      description: "Describe in detail what the final product or result should look like and how it should behave"
+      placeholder: |
         ## Expected Outcome
-        A dockerized, stateless Go microservice that serves as an integration adapter for the ONEST financial support protocol. It should:
-        - Expose 3 key APIs (PushSchemes, GetApplications, UpdateStatus)
-        - Perform automatic eligibility validation using ONEST protocol rules
-        - Allow external clients to integrate easily via sample code (~10 LoC)
-        - Serve as a foundation for future production-ready adapters
+        Describe the expected deliverables and outcomes from the contributor:
+        - Outcome 1
+        - Outcome 2
+        - Outcome 3
 
   - type: textarea
     id: ticket-expected-outcome-mentor
@@ -70,27 +66,25 @@ body:
       required: true
     attributes:
       label: Expected Outcome from Mentor
-      description: "Describe in detail the expectations from the mentors."
-      value: |
+      description: "Describe in detail the expectations from the mentors"
+      placeholder: |
         ## Mentor Expectations
-        - Guide the contributor through the ONEST protocol integration
-        - Review API designs and implementation
-        - Ensure best practices in Go microservice development
-        - Help with Docker and deployment configurations
-        - Provide feedback on code quality and architecture
+        - Expectation 1
+        - Expectation 2
+        - Expectation 3
 
   - type: textarea
     id: ticket-acceptance-criteria
+    validations:
+      required: true
     attributes:
       label: Acceptance Criteria
-      description: "List the acceptance criteria for this feature."
-      value: |
+      description: "List the acceptance criteria for this feature"
+      placeholder: |
         ## Acceptance Criteria
-        - [ ] APIs respond correctly to valid inputs and handle invalid inputs gracefully
-        - [ ] Auto-validation of applicant eligibility using ONEST protocol credentials
-        - [ ] Adapter runs in a Docker container with minimal configuration
-        - [ ] Adapter is stateless with a persistent store for schemes and applications
-        - [ ] Sample integration works with minimal developer effort (~10 lines of code)
+        - [ ] Criteria 1
+        - [ ] Criteria 2
+        - [ ] Criteria 3
 
   - type: textarea
     id: ticket-implementation-details
@@ -98,25 +92,24 @@ body:
       required: true
     attributes:
       label: Implementation Details
-      description: "List any technical details about the proposed implementation, including any specific technologies that will be used."
-      value: |
+      description: "List any technical details about the proposed implementation, including any specific technologies that will be used"
+      placeholder: |
         ## Implementation Details
-        - **Language**: Go
-        - **Microservice Architecture**: Stateless with REST endpoints
-        - **Database**: PostgreSQL preferred (lightweight in-service DB)
-        - **Deployment**: Docker container
-        - **Security**: Minimal for now; subject to future enhancements
-        - **Protocol Integration**: Based on ONEST financial support protocol specs
-        - **Design Paradigm**: Clean and modular for plug-and-play readiness
+        - **Language**: 
+        - **Architecture**: 
+        - **Database**: 
+        - **Deployment**: 
+        - **Security**: 
+        - **Design Paradigm**: 
 
   - type: textarea
     id: ticket-mockups
     attributes:
       label: Mockups/Wireframes
-      description: "Include links to any visual aids, mockups, or diagrams."
-      value: |
+      description: "Include links to any visual aids, mockups, or diagrams"
+      placeholder: |
         ## Mockups/Wireframes
-        N/A at this stage — API contract design will be shared during implementation.
+        [Add links or descriptions of any visual aids]
 
   - type: input
     id: ticket-product
@@ -125,7 +118,6 @@ body:
       placeholder: "Enter Product Name"
     validations:
       required: true
-    value: "Scheme Manager"
 
   - type: dropdown
     id: ticket-organisation
@@ -145,14 +137,14 @@ body:
         - ONEST
     validations:
       required: true
-    value: "ONEST"
 
   - type: input
     id: ticket-governance-domain
     attributes:
       label: Domain
       placeholder: "Enter Area of Governance"
-    value: "Financial Support, Governance Tech, Low-Code Integrations"
+    validations:
+      required: true
 
   - type: dropdown
     id: ticket-technical-skills-required
@@ -246,18 +238,12 @@ body:
         - Other
     validations:
       required: true
-    value:
-      - Go
-      - Docker
-      - PostgreSQL
-      - Microservices
-      - RESTful APIs
 
   - type: dropdown
     id: ticket-mentorship
     attributes:
       label: Mentorship Status
-      description: "Choose the mentorship status for this ticket."
+      description: "Choose the mentorship status for this ticket"
       multiple: false
       options:
         - Mentor Required
@@ -266,16 +252,15 @@ body:
         - Mentor not required
     validations:
       required: true
-    value: "Mentor Required"
 
   - type: textarea
     id: ticket-mentors
     attributes:
       label: Mentor(s)
       description: "Please tag relevant mentors for the ticket"
+      placeholder: "Tag mentors using their GitHub handles (@username)"
     validations:
       required: true
-    value: "TBD (Please tag appropriate folks once known)"
 
   - type: dropdown
     id: ticket-complexity
@@ -291,13 +276,12 @@ body:
         - Advanced
     validations:
       required: true
-    value: "Medium"
 
   - type: dropdown
     id: ticket-project-type
     attributes:
       label: Contribution Type
-      description: "Choose the labels that best describe this project."
+      description: "Choose the labels that best describe this project"
       multiple: true
       options:
         - Code contribution
@@ -307,14 +291,12 @@ body:
         - Others
     validations:
       required: true
-    value:
-      - Code contribution
 
   - type: dropdown
-    id: ticket-Issue-type
+    id: ticket-issue-type
     attributes:
       label: Issue Type
-      description: "Choose the labels that best describe this ticket."
+      description: "Choose the labels that best describe this ticket"
       multiple: true
       options:
         - Unpaid ticket
@@ -322,14 +304,12 @@ body:
         - Bounty ticket 
     validations:
       required: true
-    value:
-      - Bounty ticket
 
   - type: textarea
     id: ticket-monetary-incentive
     attributes:
       label: Monetary Incentive
-      description: "Please mention the amount (in INR/USD) in case of a bounty / paid ticket. Please mention NA in case it is an unpaid ticket."
+      description: "Please mention the amount (in INR/USD) in case of a bounty / paid ticket. Please mention NA in case it is an unpaid ticket"
+      placeholder: "Enter amount in INR/USD or NA"
     validations:
       required: true
-    value: "TBD"
