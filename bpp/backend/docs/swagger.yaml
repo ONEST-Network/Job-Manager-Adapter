@@ -108,14 +108,14 @@ definitions:
     properties:
       address:
         type: string
+      areaCode:
+        description: 'Postal code, for example: ''560102'''
+        type: string
       city:
         description: 'STD code, for example: ''std:080'''
         type: string
       coordinates:
         $ref: '#/definitions/business.Coordinates'
-      postalCode:
-        description: 'Postal code, for example: ''560102'''
-        type: string
       state:
         description: 'State code, for example: ''IN-KA'''
         type: string
@@ -1361,8 +1361,6 @@ definitions:
     properties:
       code:
         type: string
-      name:
-        type: string
     type: object
   github_com_ONEST-Network_Whatsapp-Chatbot_bpp_backend_pkg_types_payload_onest_search_response.Contact:
     properties:
@@ -1472,8 +1470,6 @@ definitions:
   github_com_ONEST-Network_Whatsapp-Chatbot_bpp_backend_pkg_types_payload_onest_search_response.State:
     properties:
       code:
-        type: string
-      name:
         type: string
     type: object
   github_com_ONEST-Network_Whatsapp-Chatbot_bpp_backend_pkg_types_payload_onest_search_response.Tags:
@@ -2097,14 +2093,14 @@ definitions:
     properties:
       address:
         type: string
+      areaCode:
+        description: 'Postal code, for example: ''560102'''
+        type: string
       city:
         description: 'STD code, for example: ''std:080'''
         type: string
       coordinates:
         $ref: '#/definitions/job.Coordinates'
-      postalCode:
-        description: 'Postal code, for example: ''560102'''
-        type: string
       state:
         description: 'State code, for example: ''IN-KA'''
         type: string
@@ -2276,6 +2272,11 @@ definitions:
       value:
         type: string
     type: object
+  request.ProviderAreaCode:
+    properties:
+      code:
+        type: string
+    type: object
   request.ProviderCity:
     properties:
       code:
@@ -2288,19 +2289,14 @@ definitions:
     type: object
   request.ProviderLocations:
     properties:
+      areaCode:
+        $ref: '#/definitions/request.ProviderAreaCode'
       city:
         $ref: '#/definitions/request.ProviderCity'
       coordinates:
         $ref: '#/definitions/request.Coordinates'
-      postalCode:
-        $ref: '#/definitions/request.ProviderPostalCode'
       state:
         $ref: '#/definitions/request.ProviderState'
-    type: object
-  request.ProviderPostalCode:
-    properties:
-      code:
-        type: string
     type: object
   request.ProviderState:
     properties:
@@ -2350,6 +2346,11 @@ definitions:
         $ref: '#/definitions/github_com_ONEST-Network_Whatsapp-Chatbot_bpp_backend_pkg_types_payload_onest_status_request.Context'
       message:
         $ref: '#/definitions/github_com_ONEST-Network_Whatsapp-Chatbot_bpp_backend_pkg_types_payload_onest_status_request.Message'
+    type: object
+  response.AreaCode:
+    properties:
+      code:
+        type: string
     type: object
   response.Available:
     properties:
@@ -2488,13 +2489,13 @@ definitions:
     properties:
       address:
         type: string
+      areaCode:
+        $ref: '#/definitions/response.AreaCode'
       city:
         $ref: '#/definitions/github_com_ONEST-Network_Whatsapp-Chatbot_bpp_backend_pkg_types_payload_onest_search_response.City'
       gps:
         type: string
       id:
-        type: string
-      postalCode:
         type: string
       state:
         $ref: '#/definitions/github_com_ONEST-Network_Whatsapp-Chatbot_bpp_backend_pkg_types_payload_onest_search_response.State'

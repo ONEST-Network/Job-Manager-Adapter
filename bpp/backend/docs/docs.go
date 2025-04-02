@@ -594,16 +594,16 @@ const docTemplate = `{
                 "address": {
                     "type": "string"
                 },
+                "areaCode": {
+                    "description": "Postal code, for example: '560102'",
+                    "type": "string"
+                },
                 "city": {
                     "description": "STD code, for example: 'std:080'",
                     "type": "string"
                 },
                 "coordinates": {
                     "$ref": "#/definitions/business.Coordinates"
-                },
-                "postalCode": {
-                    "description": "Postal code, for example: '560102'",
-                    "type": "string"
                 },
                 "state": {
                     "description": "State code, for example: 'IN-KA'",
@@ -2537,9 +2537,6 @@ const docTemplate = `{
             "properties": {
                 "code": {
                     "type": "string"
-                },
-                "name": {
-                    "type": "string"
                 }
             }
         },
@@ -2709,9 +2706,6 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "code": {
-                    "type": "string"
-                },
-                "name": {
                     "type": "string"
                 }
             }
@@ -3657,16 +3651,16 @@ const docTemplate = `{
                 "address": {
                     "type": "string"
                 },
+                "areaCode": {
+                    "description": "Postal code, for example: '560102'",
+                    "type": "string"
+                },
                 "city": {
                     "description": "STD code, for example: 'std:080'",
                     "type": "string"
                 },
                 "coordinates": {
                     "$ref": "#/definitions/job.Coordinates"
-                },
-                "postalCode": {
-                    "description": "Postal code, for example: '560102'",
-                    "type": "string"
                 },
                 "state": {
                     "description": "State code, for example: 'IN-KA'",
@@ -3926,6 +3920,14 @@ const docTemplate = `{
                 }
             }
         },
+        "request.ProviderAreaCode": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                }
+            }
+        },
         "request.ProviderCity": {
             "type": "object",
             "properties": {
@@ -3945,25 +3947,17 @@ const docTemplate = `{
         "request.ProviderLocations": {
             "type": "object",
             "properties": {
+                "areaCode": {
+                    "$ref": "#/definitions/request.ProviderAreaCode"
+                },
                 "city": {
                     "$ref": "#/definitions/request.ProviderCity"
                 },
                 "coordinates": {
                     "$ref": "#/definitions/request.Coordinates"
                 },
-                "postalCode": {
-                    "$ref": "#/definitions/request.ProviderPostalCode"
-                },
                 "state": {
                     "$ref": "#/definitions/request.ProviderState"
-                }
-            }
-        },
-        "request.ProviderPostalCode": {
-            "type": "object",
-            "properties": {
-                "code": {
-                    "type": "string"
                 }
             }
         },
@@ -4041,6 +4035,14 @@ const docTemplate = `{
                 },
                 "message": {
                     "$ref": "#/definitions/github_com_ONEST-Network_Whatsapp-Chatbot_bpp_backend_pkg_types_payload_onest_status_request.Message"
+                }
+            }
+        },
+        "response.AreaCode": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
                 }
             }
         },
@@ -4257,6 +4259,9 @@ const docTemplate = `{
                 "address": {
                     "type": "string"
                 },
+                "areaCode": {
+                    "$ref": "#/definitions/response.AreaCode"
+                },
                 "city": {
                     "$ref": "#/definitions/github_com_ONEST-Network_Whatsapp-Chatbot_bpp_backend_pkg_types_payload_onest_search_response.City"
                 },
@@ -4264,9 +4269,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "id": {
-                    "type": "string"
-                },
-                "postalCode": {
                     "type": "string"
                 },
                 "state": {

@@ -56,9 +56,9 @@ type AreaCode struct {
 }
 type Locations struct {
 	ID       string   `json:"id"`
-	GPS      string   `json:"gps"`
-	Address  string   `json:"address"`
-	Street   string   `json:"street"`
+	GPS      string   `json:"gps,omitempty"`
+	Address  string   `json:"address,omitempty"`
+	Street   string   `json:"street,omitempty"`
 	AreaCode AreaCode `json:"areaCode"`
 	City     City     `json:"city"`
 	State    State    `json:"state"`
