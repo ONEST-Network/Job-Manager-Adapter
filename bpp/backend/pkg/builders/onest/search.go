@@ -64,14 +64,17 @@ func BuildSearchJobsResponse(clients *clients.Clients, payload *request.SearchRe
 	for i, job := range jobs {
 		business := job.Business
 
-		if job.Location.Coordinates.Coordinates == nil {
-			return nil, fmt.Errorf("job location coordinates are missing for job %s", job.ID)
-		}
+		// TODO: Add once supported in the ONEST network protocol
+		// if job.Location.Coordinates.Coordinates == nil {
+		// 	return nil, fmt.Errorf("job location coordinates are missing for job %s", job.ID)
+		// }
 
 		res.Message.Catalog.Providers[0].Locations = append(res.Message.Catalog.Providers[0].Locations, response.Locations{
-			ID:      fmt.Sprintf("L%d", i+1),
-			Address: job.Location.Address,
-			Street:  job.Location.Street,
+			ID: fmt.Sprintf("L%d", i+1),
+			// TODO: Add once supported in the ONEST network protocol
+			// Address: job.Location.Address,
+			// TODO: Add once supported in the ONEST network protocol
+			// Street:  job.Location.Street,
 			City: response.City{
 				Code: job.Location.City,
 			},
@@ -81,7 +84,8 @@ func BuildSearchJobsResponse(clients *clients.Clients, payload *request.SearchRe
 			AreaCode: response.AreaCode{
 				Code: job.Location.AreaCode,
 			},
-			GPS: fmt.Sprintf("%f,%f", job.Location.Coordinates.Coordinates[1], job.Location.Coordinates.Coordinates[0]),
+			// TODO: Add once supported in the ONEST network protocol
+			// GPS: fmt.Sprintf("%f,%f", job.Location.Coordinates.Coordinates[1], job.Location.Coordinates.Coordinates[0]),
 		})
 
 		item := response.Items{
