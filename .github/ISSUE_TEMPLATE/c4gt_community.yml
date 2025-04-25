@@ -8,7 +8,7 @@ body:
   - type: textarea
     id: ticket-description
     validations:
-      required: truename: "C4GT Open Community Template"
+      required: true
 description: "Create a new Ticket for C4GT Open Community"
 title: "[C4GT Community]: "
 labels:
