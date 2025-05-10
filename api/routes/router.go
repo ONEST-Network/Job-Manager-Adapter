@@ -36,14 +36,14 @@ func SetupRouter(db *pgxpool.Pool, cfg *config.Config) *gin.Engine {
 			orgs.GET("/api-key/:api_key", orgHandler.GetByAPIKey)
 			orgs.PUT("/:id", orgHandler.Update)
 			orgs.DELETE("/:id", orgHandler.Delete)
+		}
 
-			// Scheme routes
-			schemes := orgs.Group("/:organization_id/schemes")
-			{
-				schemes.POST("", schemeHandler.Create)
-				schemes.GET("", schemeHandler.ListByOrganization)
-				schemes.GET("/:scheme_id", schemeHandler.GetBySchemeID)
-			}
+		// Organization-specific schemes - use a different URL pattern to avoid conflicts
+		orgSchemes := v1.Group("/org-schemes")
+		{
+			orgSchemes.POST("/:org_id", schemeHandler.Create)
+			orgSchemes.GET("/:org_id", schemeHandler.ListByOrganization)
+			orgSchemes.GET("/:org_id/:scheme_id", schemeHandler.GetBySchemeID)
 		}
 
 		// Standalone scheme routes
@@ -52,13 +52,13 @@ func SetupRouter(db *pgxpool.Pool, cfg *config.Config) *gin.Engine {
 			schemes.GET("/:id", schemeHandler.GetBySchemeID)
 			schemes.PUT("/:id/status", schemeHandler.UpdateStatus)
 			schemes.DELETE("/:id", schemeHandler.Delete)
+		}
 
-			// Application routes
-			apps := schemes.Group("/:scheme_id/applications")
-			{
-				apps.POST("", appHandler.Create)
-				apps.GET("", appHandler.ListByScheme)
-			}
+		// Scheme-specific applications - use a different URL pattern to avoid conflicts
+		schemeApps := v1.Group("/scheme-applications")
+		{
+			schemeApps.POST("/:scheme_id", appHandler.Create)
+			schemeApps.GET("/:scheme_id", appHandler.ListByScheme)
 		}
 
 		// Standalone application routes
