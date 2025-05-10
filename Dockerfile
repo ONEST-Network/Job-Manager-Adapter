@@ -1,29 +1,13 @@
-FROM golang:1.19-alpine AS builder
-
+FROM golang:1.21-alpine AS builder
 WORKDIR /app
-
-# Copy dependencies first for better caching
 COPY go.mod go.sum ./
 RUN go mod download
-
-# Copy source code
 COPY . .
-
-# Build the application
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o scheme-manager-adapter .
-
-# Use a smaller image for the final build
-FROM alpine:latest
-
+RUN CGO_ENABLED=0 GOOS=linux go build -o scheme-manager-adapter .
+FROM alpine:3.18
 RUN apk --no-cache add ca-certificates
-
-WORKDIR /root/
-
-# Copy the binary from the builder stage
+WORKDIR /app
 COPY --from=builder /app/scheme-manager-adapter .
-
-# Expose the application port
+COPY --from=builder /app/config.yaml ./
 EXPOSE 8080
-
-# Run the binary
 CMD ["./scheme-manager-adapter"]
